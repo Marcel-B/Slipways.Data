@@ -23,6 +23,8 @@ jobs:
         dotnet-version: 3.1.100
     - name: Build with dotnet
       run: dotnet build --configuration Release
+    - name: directory
+      run: ls
     - name: publish
       env:
         super_secret: ${{ secrets.NEXUS }} 

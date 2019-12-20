@@ -1,5 +1,4 @@
-﻿using com.b_velop.Slipways.Data.Extensions;
-using com.b_velop.Slipways.Data.Models;
+﻿using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,7 +26,8 @@ namespace com.b_velop.Slipways.Data
             _logger = logger;
         }
 
-        protected async override void OnModelCreating(ModelBuilder modelBuilder)
+        protected async override void OnModelCreating(
+            ModelBuilder modelBuilder)
         {
             if (modelBuilder == null)
                 throw new ArgumentNullException(nameof(modelBuilder));

@@ -30,4 +30,4 @@ jobs:
     - name: publish
       env:
         super_secret: ${{ secrets.NEXUS }} 
-      run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret /home/runner/work/Slipways.Data/Slipways.Data/*.nupkg && ls && rm ./*.nupkg
+      run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret *.nupkg

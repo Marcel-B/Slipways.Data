@@ -31,7 +31,7 @@ namespace com.b_velop.Slipways.Data
         {
             if (modelBuilder == null)
                 throw new ArgumentNullException(nameof(modelBuilder));
-            await modelBuilder.Seed();
+            //await modelBuilder.Seed();
         }
     }
 }

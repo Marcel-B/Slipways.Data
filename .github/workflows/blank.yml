@@ -31,3 +31,5 @@ jobs:
       env:
         super_secret: ${{ secrets.NEXUS }} 
       run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret **/*.nupkg
+    - name: clean
+      run: rm **/*.nupkg

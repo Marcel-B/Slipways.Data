@@ -13,7 +13,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             IDistributedCache cache,
             ILogger<RepositoryBase<SlipwayExtra>> logger) : base(db, cache, logger)
         {
-            Key = Cache.SlipwayExtra;
+            Key = Cache.SlipwayExtras;
         }
     }
 }

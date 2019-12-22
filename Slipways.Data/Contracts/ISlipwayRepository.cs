@@ -9,9 +9,9 @@ namespace com.b_velop.Slipways.Data.Contracts
 {
     public interface ISlipwayRepository : IRepositoryBase<Slipway>
     {
-        Task<IEnumerable<Slipway>> SelectIncludeAllAsync();
-        Task<Slipway> SelectByIdIncludeAsync(Guid id);
-        Task<IEnumerable<Slipway>> SelectByExtraIdAsync(Guid extraId);
+        //Task<IEnumerable<Slipway>> SelectIncludeAllAsync();
+        //Task<Slipway> SelectByIdIncludeAsync(Guid id);
+        //Task<IEnumerable<Slipway>> SelectByExtraIdAsync(Guid extraId);
         Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(IEnumerable<Guid> waterIds, CancellationToken cancellationToken);
         Task<ILookup<Guid, Slipway>> GetSlipwaysByExtraIdAsync(IEnumerable<Guid> extraIds, CancellationToken cancellationToken);
     }

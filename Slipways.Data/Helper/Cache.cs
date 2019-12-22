@@ -4,10 +4,10 @@
     {
         public const string Stations = "Stations";
         public const string Extras = "Extras";
-        public const string Manufacturer = "Manufacturer";
+        public const string Manufacturers = "Manufacturers";
         public const string Waters = "Waters";
-        public const string ManufacturerService = "ManufacturerService";
-        public const string SlipwayExtra = "SlipwayExtra;";
-        public const string Service = "Service";
+        public const string ManufacturerServices = "ManufacturerServices";
+        public const string SlipwayExtras = "SlipwayExtras";
+        public const string Services = "Services";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
@@ -25,12 +26,15 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public override async Task<IEnumerable<Water>> SelectAllAsync()
         {
-            if (!_cache.TryGetValue(Cache.Waters, out IEnumerable<Water> waters))
-            {
-                waters = await base.SelectAllAsync();
-                _cache.Set(Cache.Waters, waters);
-            }
+            var waterBytes = await _dcache.GetAsync(Key);
+            var waters = waterBytes.ToObject<IEnumerable<Water>>();
             return waters;
+            //if (!_cache.TryGetValue(Cache.Waters, out IEnumerable<Water> waters))
+            //{
+            //    waters = await base.SelectAllAsync();
+            //    _cache.Set(Cache.Waters, waters);
+            //}
+            //return waters;
         }
 
         public async Task<IDictionary<Guid, Water>> GetWatersByIdAsync(

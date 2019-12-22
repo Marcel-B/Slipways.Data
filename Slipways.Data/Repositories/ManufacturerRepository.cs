@@ -1,4 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
@@ -49,11 +50,8 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public override async Task<IEnumerable<Manufacturer>> SelectAllAsync()
         {
-            if (!_cache.TryGetValue(Cache.Manufacturer, out IEnumerable<Manufacturer> manufacturers))
-            {
-                manufacturers = await base.SelectAllAsync();
-                _cache.Set(Cache.Manufacturer, manufacturers);
-            }
+            var manufacturerBytes = await _dcache.GetAsync(Key);
+            var manufacturers = manufacturerBytes.ToObject<IEnumerable<Manufacturer>>();
             return manufacturers;
         }
     }

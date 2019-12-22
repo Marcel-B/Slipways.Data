@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using com.b_velop.Slipways.Data.Contracts;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
-    public class StationDto
+    public class StationDto : IDto
     {
         [JsonPropertyName("uuid")]
         public Guid Id { get; set; }

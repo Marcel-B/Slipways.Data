@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using com.b_velop.Slipways.Data.Contracts;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
-    public class ManufacturerDto
+    public class ManufacturerDto : IDto
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }

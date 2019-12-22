@@ -4,20 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
-      [Serializable]
-  public class Manufacturer : Entity
+    [Serializable]
+    public class Manufacturer : Entity
     {
         public Manufacturer()
         {
             Services = new HashSet<Manufacturer>();
         }
-
-        //public Manufacturer(
-        //    ManufacturerDto m) : this()
-        //{
-        //    Id = m.Id;
-        //    Name = m.Name;
-        //}
 
         public string Name { get; set; }
 

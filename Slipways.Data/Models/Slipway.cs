@@ -13,26 +13,6 @@ namespace com.b_velop.Slipways.Data.Models
             Extras = new List<Extra>();
         }
 
-        //public Slipway(
-        //    SlipwayDto s)
-        //{
-        //    Name = s.Name;
-        //    WaterFk = s.WaterFk;
-        //    Rating = s.Rating;
-        //    Comment = s.Comment;
-        //    Street = s.Street;
-        //    Postalcode = s.Postalcode;
-        //    City = s.City;
-        //    Costs = s.Costs;
-        //    Pro = s.Pro;
-        //    Contra = s.Contra;
-        //    Longitude = s.Longitude;
-        //    Latitude = s.Latitude;
-        //    Created = s.Created;
-        //    Id = s.Id;
-        //    Updated = s.Updated;
-        //}
-
         public string Name { get; set; }
 
         public Guid WaterFk { get; set; }

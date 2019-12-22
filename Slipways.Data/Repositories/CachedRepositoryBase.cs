@@ -1,4 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,18 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class CachedRepositoryBase<T> : RepositoryBase<T>, ICachedRepositoryBase<T> where T : class, IEntity, new()
     {
         protected IMemoryCache _cache;
+        protected IDistributedCache _dcache;
+
         protected string Key { get; set; }
 
         public CachedRepositoryBase(
             SlipwaysContext db,
+            IDistributedCache dcache,
             IMemoryCache cache,
             ILogger<RepositoryBase<T>> logger) : base(db, logger)
         {
             _cache = cache;
+            _dcache = dcache;
         }
 
         public override async Task<T> InsertAsync(

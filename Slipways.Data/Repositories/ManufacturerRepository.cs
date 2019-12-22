@@ -1,6 +1,7 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,7 +17,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public ManufacturerRepository(
             SlipwaysContext db,
             IMemoryCache cache,
-            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, cache, logger)
+             IDistributedCache dcache,
+            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, dcache, cache, logger)
         {
             Key = Cache.Manufacturer;
         }

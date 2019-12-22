@@ -2,6 +2,7 @@
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,7 +18,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public StationRepository(
             SlipwaysContext db,
             IMemoryCache cache,
-            ILogger<RepositoryBase<Station>> logger) : base(db, cache, logger)
+            IDistributedCache dcache,
+            ILogger<RepositoryBase<Station>> logger) : base(db, dcache, cache, logger)
         {
             Key = Cache.Stations;
         }

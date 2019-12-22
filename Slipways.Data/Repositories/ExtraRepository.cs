@@ -1,6 +1,8 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,19 +18,23 @@ namespace com.b_velop.Slipways.Data.Repositories
         public ExtraRepository(
             SlipwaysContext db,
             IMemoryCache cache,
-            ILogger<RepositoryBase<Extra>> logger) : base(db, cache, logger)
+            IDistributedCache dcache,
+            ILogger<RepositoryBase<Extra>> logger) : base(db, dcache, cache, logger)
         {
             Key = Cache.Extras;
         }
 
         public override async Task<IEnumerable<Extra>> SelectAllAsync()
         {
-            if (!_cache.TryGetValue(Cache.Extras, out IEnumerable<Extra> extras))
-            {
-                extras = await base.SelectAllAsync();
-                _cache.Set(Cache.Extras, extras);
-            }
+            var extraBytes = await _dcache.GetAsync(Cache.Extras);
+            var extras = extraBytes.ToObject<IEnumerable<Extra>>();
             return extras;
+            //if (!_cache.TryGetValue(Cache.Extras, out IEnumerable<Extra> extras))
+            //{
+            //    extras = await base.SelectAllAsync();
+            //    _cache.Set(Cache.Extras, extras);
+            //}
+            //return extras;
         }
 
         public async Task<ILookup<Guid, Extra>> GetExtrasBySlipwayIdAsync(

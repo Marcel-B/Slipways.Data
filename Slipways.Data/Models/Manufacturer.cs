@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
-    public class Manufacturer : Entity
+      [Serializable]
+  public class Manufacturer : Entity
     {
         public Manufacturer()
         {

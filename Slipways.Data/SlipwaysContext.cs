@@ -26,7 +26,7 @@ namespace com.b_velop.Slipways.Data
             _logger = logger;
         }
 
-        protected async override void OnModelCreating(
+        protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
             if (modelBuilder == null)

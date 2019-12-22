@@ -5,7 +5,8 @@ namespace com.b_velop.Slipways.Data.Extensions
 {
     public static class ManufacturerWrapper
     {
-        public static ManufacturerDto ToDto(this Manufacturer m)
+        public static ManufacturerDto ToDto(
+            this Manufacturer m)
         {
             var manufacturer = new ManufacturerDto
             {
@@ -15,7 +16,8 @@ namespace com.b_velop.Slipways.Data.Extensions
             return manufacturer;
         }
 
-        public static Manufacturer ToClass(this ManufacturerDto m)
+        public static Manufacturer ToClass(
+            this ManufacturerDto m)
         {
             var manufacturer = new Manufacturer
             {

@@ -1,6 +1,7 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,9 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public SlipwayRepository(
             SlipwaysContext db,
+            IDistributedCache cache,
             IExtraRepository extraRepository,
-            ILogger<RepositoryBase<Slipway>> logger) : base(db, logger)
+            ILogger<RepositoryBase<Slipway>> logger) : base(db, cache, logger)
         {
             _extraRepository = extraRepository;
         }

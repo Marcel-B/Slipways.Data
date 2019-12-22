@@ -13,40 +13,26 @@ using System.Threading.Tasks;
 
 namespace com.b_velop.Slipways.Data.Repositories
 {
-    public class WaterRepository : CachedRepositoryBase<Water>, IWaterRepository
+    public class WaterRepository : RepositoryBase<Water>, IWaterRepository
     {
         public WaterRepository(
              SlipwaysContext db,
-             IMemoryCache cache,
              IDistributedCache dcache,
-             ILogger<RepositoryBase<Water>> logger) : base(db, dcache, cache, logger)
+             ILogger<RepositoryBase<Water>> logger) : base(db, dcache, logger)
         {
             Key = Cache.Waters;
         }
 
-        public override async Task<IEnumerable<Water>> SelectAllAsync()
-        {
-            var waterBytes = await _dcache.GetAsync(Key);
-            var waters = waterBytes.ToObject<IEnumerable<Water>>();
-            return waters;
-            //if (!_cache.TryGetValue(Cache.Waters, out IEnumerable<Water> waters))
-            //{
-            //    waters = await base.SelectAllAsync();
-            //    _cache.Set(Cache.Waters, waters);
-            //}
-            //return waters;
-        }
-
-        public async Task<IDictionary<Guid, Water>> GetWatersByIdAsync(
-            IEnumerable<Guid> waterIds,
-            CancellationToken cancellationToken)
-        {
-            var waters = await SelectAllAsync();
-            var result = new Dictionary<Guid, Water>();
-            foreach (var water in waters)
-                if (waterIds.Contains(water.Id))
-                    result[water.Id] = water;
-            return result;
-        }
+        //public async Task<IDictionary<Guid, Water>> GetWatersByIdAsync(
+        //    IEnumerable<Guid> waterIds,
+        //    CancellationToken cancellationToken)
+        //{
+        //    var waters = await SelectAllAsync();
+        //    var result = new Dictionary<Guid, Water>();
+        //    foreach (var water in waters)
+        //        if (waterIds.Contains(water.Id))
+        //            result[water.Id] = water;
+        //    return result;
+        //}
     }
 }

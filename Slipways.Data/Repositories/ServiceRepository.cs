@@ -1,6 +1,8 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,10 +18,12 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public ServiceRepository(
             SlipwaysContext db,
+            IDistributedCache cache,
             IManufacturerRepository rep,
-            ILogger<RepositoryBase<Service>> logger) : base(db, logger)
+            ILogger<RepositoryBase<Service>> logger) : base(db, cache, logger)
         {
             _rep = rep;
+            Key = Cache.Service;
         }
 
         public async Task<ILookup<Guid, Service>> GetServicesByManufacturerIdAsync(

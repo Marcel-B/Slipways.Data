@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace com.b_velop.Slipways.Data.Contracts
 {
-    public interface IManufacturerRepository : ICachedRepositoryBase<Manufacturer>
+    public interface IManufacturerRepository : IRepositoryBase<Manufacturer>
     {
         Task<ILookup<Guid, Manufacturer>> GetManufacturerByServiceIdAsync(IEnumerable<Guid> serviceIds, CancellationToken cancellationToken);
     }

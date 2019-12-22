@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace com.b_velop.Slipways.Data.Contracts
 {
-    public interface IExtraRepository : ICachedRepositoryBase<Extra>
+    public interface IExtraRepository : IRepositoryBase<Extra>
     {
         Task<ILookup<Guid, Extra>> GetExtrasBySlipwayIdAsync(
             IEnumerable<Guid> slipwaysIds,

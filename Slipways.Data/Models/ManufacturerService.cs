@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
+    [Serializable]
     public class ManufacturerService : Entity
     {
         [ForeignKey("ManufacturerFk")]

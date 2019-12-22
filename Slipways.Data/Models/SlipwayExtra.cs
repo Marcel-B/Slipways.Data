@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
+    [Serializable]
     public class SlipwayExtra : Entity
     {
         public Guid SlipwayFk { get; set; }

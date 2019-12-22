@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace com.b_velop.Slipways.Data.Models
 {
+    [Serializable]
     public abstract class Entity : IEntity
     {
         [Key]

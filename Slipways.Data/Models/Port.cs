@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
-      [Serializable]
-  public class Port : Locationable
+    [Serializable]
+    public class Port : Locationable
     {
         public string Name { get; set; }
         public string Url { get; set; }

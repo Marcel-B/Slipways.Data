@@ -23,7 +23,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             ILogger<RepositoryBase<Service>> logger) : base(db, cache, logger)
         {
             _rep = rep;
-            Key = Cache.Service;
+            Key = Cache.Services;
         }
 
         public async Task<ILookup<Guid, Service>> GetServicesByManufacturerIdAsync(

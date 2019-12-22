@@ -13,7 +13,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             IDistributedCache cache,
             ILogger<RepositoryBase<ManufacturerService>> logger) : base(db, cache, logger)
         {
-            Key = Cache.ManufacturerService;
+            Key = Cache.ManufacturerServices;
         }
     }
 }

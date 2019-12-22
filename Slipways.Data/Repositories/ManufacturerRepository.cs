@@ -17,11 +17,10 @@ namespace com.b_velop.Slipways.Data.Repositories
     {
         public ManufacturerRepository(
             SlipwaysContext db,
-            IMemoryCache cache,
-             IDistributedCache dcache,
+            IDistributedCache dcache,
             ILogger<RepositoryBase<Manufacturer>> logger) : base(db, dcache, logger)
         {
-            Key = Cache.Manufacturer;
+            Key = Cache.Manufacturers;
         }
 
         public async Task<ILookup<Guid, Manufacturer>> GetManufacturerByServiceIdAsync(

@@ -1,4 +1,6 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Extensions;
+using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -41,7 +43,9 @@ namespace com.b_velop.Slipways.Data.Repositories
              CancellationToken cancellationToken)
         {
             var slipways = await SelectAllAsync();
-            var slipwayExtras = Db.SlipwayExtras.Where(_ => extraIds.Contains(_.ExtraFk));
+            var slipwayExtrasByte = await DCache.GetAsync(Cache.SlipwayExtras);
+            var slipwayExtrasAll = slipwayExtrasByte.ToObject<IEnumerable<SlipwayExtra>>();
+            var slipwayExtras = slipwayExtrasAll.Where(_ => extraIds.Contains(_.ExtraFk));
 
             var result = new List<Slipway>();
 
@@ -72,49 +76,51 @@ namespace com.b_velop.Slipways.Data.Repositories
             return result.ToLookup(x => x.ExtraFk);
         }
 
-        public async Task<IEnumerable<Slipway>> SelectByExtraIdAsync(
-            Guid extraId)
-        {
-            var extras = Db.SlipwayExtras.Where(_ => _.ExtraFk == extraId).Select(_ => _.SlipwayFk);
-            var allSlips = await SelectIncludeAllAsync();
-            return allSlips.Where(_ => extras.Contains(extraId));
-        }
+        //public async Task<IEnumerable<Slipway>> SelectByExtraIdAsync(
+        //    Guid extraId)
+        //{
+        //    var slipwayExtrasBytes = await DCache.GetAsync(Cache.SlipwayExtras);
+        //    var slipwayExtrasAll = slipwayExtrasBytes.ToObject<IEnumerable<SlipwayExtra>>();
+        //    var extras = slipwayExtrasAll.Where(_ => _.ExtraFk == extraId).Select(_ => _.SlipwayFk);
+        //    var allSlips = await SelectIncludeAllAsync();
+        //    return allSlips.Where(_ => extras.Contains(extraId));
+        //}
 
-        public async Task<IEnumerable<Slipway>> SelectIncludeAllAsync()
-        {
-            var slipways = await Db
-                  .Slipways
-                  .Include(_ => _.Water)
-                  .ToListAsync();
+        //public async Task<IEnumerable<Slipway>> SelectIncludeAllAsync()
+        //{
+        //    var slipways = await Db
+        //          .Slipways
+        //          .Include(_ => _.Water)
+        //          .ToListAsync();
 
-            foreach (var slipway in slipways)
-            {
-                slipway.Extras.AddRange(
-                  (await _extraRepository.SelectAllAsync())
-                      .Where(_ =>
-                          Db.SlipwayExtras
-                              .Where(_ => _.SlipwayFk == slipway.Id)
-                              .Select(_ => _.ExtraFk)
-                              .Contains(_.Id)));
-            }
-            return slipways;
-        }
+        //    foreach (var slipway in slipways)
+        //    {
+        //        slipway.Extras.AddRange(
+        //          (await _extraRepository.SelectAllAsync())
+        //              .Where(_ =>
+        //                  Db.SlipwayExtras
+        //                      .Where(_ => _.SlipwayFk == slipway.Id)
+        //                      .Select(_ => _.ExtraFk)
+        //                      .Contains(_.Id)));
+        //    }
+        //    return slipways;
+        //}
 
-        public async Task<Slipway> SelectByIdIncludeAsync(
-            Guid id)
-        {
-            var slipway = await Db.Slipways
-              .Include(_ => _.Water)
-              .FirstOrDefaultAsync(_ => _.Id == id);
+        //public async Task<Slipway> SelectByIdIncludeAsync(
+        //    Guid id)
+        //{
+        //    var slipway = await Db.Slipways
+        //      .Include(_ => _.Water)
+        //      .FirstOrDefaultAsync(_ => _.Id == id);
 
-            slipway.Extras.AddRange(
-                (await _extraRepository.SelectAllAsync())
-                    .Where(_ =>
-                        Db.SlipwayExtras
-                            .Where(_ => _.SlipwayFk == slipway.Id)
-                            .Select(_ => _.ExtraFk)
-                            .Contains(_.Id)));
-            return slipway;
-        }
+        //    slipway.Extras.AddRange(
+        //        (await _extraRepository.SelectAllAsync())
+        //            .Where(_ =>
+        //                Db.SlipwayExtras
+        //                    .Where(_ => _.SlipwayFk == slipway.Id)
+        //                    .Select(_ => _.ExtraFk)
+        //                    .Contains(_.Id)));
+        //    return slipway;
+        //}
     }
 }

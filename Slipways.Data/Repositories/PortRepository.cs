@@ -1,5 +1,7 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,11 +17,13 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public PortRepository(
             SlipwaysContext db,
+            IDistributedCache cache,
             IWaterRepository waterRepository,
             ILogger<RepositoryBase<Port>> logger) :
-            base(db, logger)
+            base(db, cache, logger)
         {
             _waterRepository = waterRepository;
+            Key = Cache.Waters;
         }
 
         public async Task<ILookup<Guid, Port>> GetPortsByWaterIdAsync(

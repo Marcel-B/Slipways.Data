@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace com.b_velop.Slipways.Data.Repositories
 {
-    public class ManufacturerRepository : CachedRepositoryBase<Manufacturer>, IManufacturerRepository
+    public class ManufacturerRepository : RepositoryBase<Manufacturer>, IManufacturerRepository
     {
         public ManufacturerRepository(
             SlipwaysContext db,
             IMemoryCache cache,
              IDistributedCache dcache,
-            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, dcache, cache, logger)
+            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, dcache, logger)
         {
             Key = Cache.Manufacturer;
         }
@@ -46,13 +46,6 @@ namespace com.b_velop.Slipways.Data.Repositories
                     });
             }
             return result.ToLookup(_ => _.ServiceFk);
-        }
-
-        public override async Task<IEnumerable<Manufacturer>> SelectAllAsync()
-        {
-            var manufacturerBytes = await _dcache.GetAsync(Key);
-            var manufacturers = manufacturerBytes.ToObject<IEnumerable<Manufacturer>>();
-            return manufacturers;
         }
     }
 }

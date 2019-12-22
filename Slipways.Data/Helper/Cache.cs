@@ -6,5 +6,8 @@
         public const string Extras = "Extras";
         public const string Manufacturer = "Manufacturer";
         public const string Waters = "Waters";
+        public const string ManufacturerService = "ManufacturerService";
+        public const string SlipwayExtra = "SlipwayExtra;";
+        public const string Service = "Service";
     }
 }

@@ -13,29 +13,28 @@ using System.Threading.Tasks;
 
 namespace com.b_velop.Slipways.Data.Repositories
 {
-    public class ExtraRepository : CachedRepositoryBase<Extra>, IExtraRepository
+    public class ExtraRepository : RepositoryBase<Extra>, IExtraRepository
     {
         public ExtraRepository(
             SlipwaysContext db,
-            IMemoryCache cache,
             IDistributedCache dcache,
-            ILogger<RepositoryBase<Extra>> logger) : base(db, dcache, cache, logger)
+            ILogger<RepositoryBase<Extra>> logger) : base(db, dcache, logger)
         {
             Key = Cache.Extras;
         }
 
-        public override async Task<IEnumerable<Extra>> SelectAllAsync()
-        {
-            var extraBytes = await _dcache.GetAsync(Cache.Extras);
-            var extras = extraBytes.ToObject<IEnumerable<Extra>>();
-            return extras;
-            //if (!_cache.TryGetValue(Cache.Extras, out IEnumerable<Extra> extras))
-            //{
-            //    extras = await base.SelectAllAsync();
-            //    _cache.Set(Cache.Extras, extras);
-            //}
-            //return extras;
-        }
+        //public override async Task<IEnumerable<Extra>> SelectAllAsync()
+        //{
+        //    var extraBytes = await _dcache.GetAsync(Cache.Extras);
+        //    var extras = extraBytes.ToObject<IEnumerable<Extra>>();
+        //    return extras;
+        //    //if (!_cache.TryGetValue(Cache.Extras, out IEnumerable<Extra> extras))
+        //    //{
+        //    //    extras = await base.SelectAllAsync();
+        //    //    _cache.Set(Cache.Extras, extras);
+        //    //}
+        //    //return extras;
+        //}
 
         public async Task<ILookup<Guid, Extra>> GetExtrasBySlipwayIdAsync(
             IEnumerable<Guid> slipwaysIds,

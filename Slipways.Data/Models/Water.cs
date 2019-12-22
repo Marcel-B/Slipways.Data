@@ -1,7 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace com.b_velop.Slipways.Data.Models
 {
+    [Serializable]
     public class Water : Entity
     {
         [JsonPropertyName("shortname")]

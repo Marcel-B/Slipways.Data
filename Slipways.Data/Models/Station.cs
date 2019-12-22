@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
 {
-    public class Station : Locationable
+     [Serializable]
+   public class Station : Locationable
     {
         public string Number { get; set; }
         public string Shortname { get; set; }

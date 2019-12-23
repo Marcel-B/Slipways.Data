@@ -28,7 +28,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var manufacturers = await SelectAllAsync();
-            var manufacturerServices = Db.ManufacturerServices.Where(_ => serviceIds.Contains(_.ServiceFk));
+            var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
+            var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
+            var manufacturerServices = manufacturerServicesAll.Where(_ => serviceIds.Contains(_.ServiceFk));
             var result = new List<Manufacturer>();
 
             foreach (var manufacturerService in manufacturerServices)

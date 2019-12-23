@@ -41,7 +41,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var extras = await SelectAllAsync();
-            var extraIds = Db.SlipwayExtras.Where(_ => slipwaysIds.Contains(_.SlipwayFk));
+            var slipwayExtrasBytes = await DCache.GetAsync(Cache.SlipwayExtras);
+            var slipwayExtrasAll = slipwayExtrasBytes.ToObject<IEnumerable<SlipwayExtra>>();
+            var extraIds = slipwayExtrasAll.Where(_ => slipwaysIds.Contains(_.SlipwayFk));
             var result = new List<Extra>();
 
             foreach (var extraId in extraIds)

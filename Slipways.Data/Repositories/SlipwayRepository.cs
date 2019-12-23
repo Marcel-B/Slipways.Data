@@ -24,6 +24,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             ILogger<RepositoryBase<Slipway>> logger) : base(db, cache, logger)
         {
             _extraRepository = extraRepository;
+            Key = Cache.Slipways;
         }
 
         public async Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(

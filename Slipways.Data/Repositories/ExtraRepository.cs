@@ -3,7 +3,6 @@ using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,19 +21,6 @@ namespace com.b_velop.Slipways.Data.Repositories
         {
             Key = Cache.Extras;
         }
-
-        //public override async Task<IEnumerable<Extra>> SelectAllAsync()
-        //{
-        //    var extraBytes = await _dcache.GetAsync(Cache.Extras);
-        //    var extras = extraBytes.ToObject<IEnumerable<Extra>>();
-        //    return extras;
-        //    //if (!_cache.TryGetValue(Cache.Extras, out IEnumerable<Extra> extras))
-        //    //{
-        //    //    extras = await base.SelectAllAsync();
-        //    //    _cache.Set(Cache.Extras, extras);
-        //    //}
-        //    //return extras;
-        //}
 
         public async Task<ILookup<Guid, Extra>> GetExtrasBySlipwayIdAsync(
             IEnumerable<Guid> slipwaysIds,

@@ -1,5 +1,4 @@
-﻿using System;
-using com.b_velop.Slipways.Data.Models;
+﻿using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

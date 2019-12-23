@@ -15,15 +15,11 @@ namespace com.b_velop.Slipways.Data.Repositories
 {
     public class ServiceRepository : RepositoryBase<Service>, IServiceRepository
     {
-        private IManufacturerRepository _rep;
-
         public ServiceRepository(
             SlipwaysContext db,
             IDistributedCache cache,
-            IManufacturerRepository rep,
             ILogger<RepositoryBase<Service>> logger) : base(db, cache, logger)
         {
-            _rep = rep;
             Key = Cache.Services;
         }
 
@@ -62,24 +58,5 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             return result.ToLookup(_ => _.ManufacturerFk);
         }
-
-        //public async Task<IEnumerable<Service>> GetAllIncludeAsync()
-        //{
-        //    var services = await Db.Services.ToListAsync();
-
-        //    foreach (var service in services)
-        //    {
-        //        service
-        //            .Manufacturers
-        //            .AddRange(
-        //                (await _rep.SelectAllAsync())
-        //                    .Where(_ => Db
-        //                    .ManufacturerServices
-        //                    .Where(_ => _.ServiceFk == service.Id)
-        //                    .Select(_ => _.ManufacturerFk)
-        //                    .Contains(_.Id)));
-        //    }
-        //    return services;
-        //}
     }
 }

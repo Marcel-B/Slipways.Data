@@ -9,7 +9,7 @@ namespace com.b_velop.Slipways.Data.Contracts
 {
     public interface IWaterRepository : IRepositoryBase<Water>
     {
-        Task<ILookup<Guid, Water>> GetWatersByIdAsync(IEnumerable<Guid> waterIds,
+        Task<IDictionary<Guid, Water>> GetWatersByIdAsync(IEnumerable<Guid> waterIds,
              CancellationToken cancellationToken);
     }
 }

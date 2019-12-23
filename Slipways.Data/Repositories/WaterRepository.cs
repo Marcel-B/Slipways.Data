@@ -21,13 +21,13 @@ namespace com.b_velop.Slipways.Data.Repositories
             Key = Cache.Waters;
         }
 
-        public async Task<ILookup<Guid, Water>> GetWatersByIdAsync(
+        public async Task<IDictionary<Guid, Water>> GetWatersByIdAsync(
             IEnumerable<Guid> waterIds,
              CancellationToken cancellationToken)
         {
             var waters = await SelectAllAsync();
             var result = waters.Where(_ => waterIds.Contains(_.Id));
-            return result.ToLookup(x => x.Id);
+            return result.ToDictionary(x => x.Id);
         }
     }
 }

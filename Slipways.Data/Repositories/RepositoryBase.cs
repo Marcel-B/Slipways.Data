@@ -12,7 +12,7 @@ namespace com.b_velop.Slipways.Data.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class, IEntity
     {
-        protected SlipwaysContext Db;
+        private SlipwaysContext Db;
         protected ILogger<RepositoryBase<T>> _logger;
         protected string Key { get; set; }
         protected IDistributedCache DCache { get; }

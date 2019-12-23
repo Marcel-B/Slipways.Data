@@ -9,7 +9,6 @@ namespace com.b_velop.Slipways.Data.Contracts
 {
     public interface IServiceRepository : IRepositoryBase<Service>
     {
-        //Task<IEnumerable<Service>> GetAllIncludeAsync();
         Task<ILookup<Guid, Service>> GetServicesByManufacturerIdAsync(IEnumerable<Guid> manufacturerIds, CancellationToken cancellationToken);
     }
 }

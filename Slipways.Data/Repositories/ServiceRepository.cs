@@ -1,4 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var services = await SelectAllAsync();
-            var manufacturerServices = Db.ManufacturerServices.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
+            var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
+            var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
+
+            var manufacturerServices = manufacturerServicesAll.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
+
             var result = new List<Service>();
 
             foreach (var manufacturerService in manufacturerServices)
@@ -58,23 +63,23 @@ namespace com.b_velop.Slipways.Data.Repositories
             return result.ToLookup(_ => _.ManufacturerFk);
         }
 
-        public async Task<IEnumerable<Service>> GetAllIncludeAsync()
-        {
-            var services = await Db.Services.ToListAsync();
+        //public async Task<IEnumerable<Service>> GetAllIncludeAsync()
+        //{
+        //    var services = await Db.Services.ToListAsync();
 
-            foreach (var service in services)
-            {
-                service
-                    .Manufacturers
-                    .AddRange(
-                        (await _rep.SelectAllAsync())
-                            .Where(_ => Db
-                            .ManufacturerServices
-                            .Where(_ => _.ServiceFk == service.Id)
-                            .Select(_ => _.ManufacturerFk)
-                            .Contains(_.Id)));
-            }
-            return services;
-        }
+        //    foreach (var service in services)
+        //    {
+        //        service
+        //            .Manufacturers
+        //            .AddRange(
+        //                (await _rep.SelectAllAsync())
+        //                    .Where(_ => Db
+        //                    .ManufacturerServices
+        //                    .Where(_ => _.ServiceFk == service.Id)
+        //                    .Select(_ => _.ManufacturerFk)
+        //                    .Contains(_.Id)));
+        //    }
+        //    return services;
+        //}
     }
 }

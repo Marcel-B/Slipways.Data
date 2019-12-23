@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using com.b_velop.Slipways.Data.Contracts;
 using com.b_velop.Slipways.Data.Helper;
@@ -21,7 +22,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         }
 
         public async Task<ILookup<Guid, Water>> GetWatersByIdAsync(
-            IEnumerable<Guid> waterIds)
+            IEnumerable<Guid> waterIds,
+             CancellationToken cancellationToken)
         {
             var waters = await SelectAllAsync();
             var result = waters.Where(_ => waterIds.Contains(_.Id));

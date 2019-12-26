@@ -113,20 +113,50 @@ namespace com.b_velop.Slipways.Data.Repositories
         public virtual async Task<T> DeleteAsync(
             Guid id)
         {
-            var tmp = await Db.Set<T>().FirstOrDefaultAsync(_ => _.Id == id);
-            if (tmp == null)
+            if (id == Guid.Empty)
+                throw new ArgumentNullException();
+            T result = default;
+            try
             {
-                _logger.LogWarning(5555, $"Can't delete Entity with ID '{id}'. Entity not exsists");
-                return null;
+                var tmp = await Db.Set<T>().FirstOrDefaultAsync(_ => _.Id == id);
+                if (tmp == null)
+                {
+                    _logger.LogWarning(5555, $"Can't delete Entity with ID '{id}'. Entity not exsists");
+                    return null;
+                }
+                result = Db.Set<T>().Remove(tmp).Entity;
+                _ = Db.SaveChanges();
             }
-            var result = Db.Set<T>().Remove(tmp);
-            _ = Db.SaveChanges();
-            var entities = await SelectAllAsync();
-            var list = entities.ToList();
-            var ne = list.Where(_ => _.Id != id);
-            await DCache.RemoveAsync(Key);
-            await DCache.SetAsync(Key, ne.ToByteArray());
-            return result.Entity;
+            catch (DbUpdateConcurrencyException e)
+            {
+                _logger.LogError(2323, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+            }
+            catch (DbUpdateException e)
+            {
+                _logger.LogError(2424, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+            }
+            try
+            {
+                var entities = await SelectAllAsync();
+                var list = entities.ToList();
+                var ne = list.Where(_ => _.Id == id);
+                await DCache.RemoveAsync(Key);
+                await DCache.SetAsync(Key, ne.ToByteArray());
+                return result;
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(5656, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+            }
+            return null;
         }
     }
 }

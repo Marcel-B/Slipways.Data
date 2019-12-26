@@ -142,10 +142,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             try
             {
                 var entities = await SelectAllAsync();
+                _logger.LogInformation(1234, $"Entities selected");
                 var list = entities.ToList();
-                var ne = list.Where(_ => _.Id == id);
+                _logger.LogInformation(1234, $"Entities toList");
+                var ne = list.FirstOrDefault(_ => _.Id == id);
+                _logger.LogInformation(1234, $"Select value with id '{id}', from '{ne?.Id}'");
                 await DCache.RemoveAsync(Key);
+                _logger.LogInformation(1234, $"Entity Removed");
                 await DCache.SetAsync(Key, ne.ToByteArray());
+                _logger.LogInformation(1234, $"Entities set to Cache");
                 return result;
             }
             catch (ArgumentNullException e)

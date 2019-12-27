@@ -1,9 +1,11 @@
-﻿using com.b_velop.Slipways.Data.Models;
+﻿using System;
+using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace com.b_velop.Slipways.Data
 {
+
     public class SlipwaysContext : DbContext
     {
         public DbSet<Water> Waters { get; set; }

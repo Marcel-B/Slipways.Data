@@ -3,6 +3,7 @@ using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,9 @@ namespace com.b_velop.Slipways.Data.Repositories
         public PortRepository(
             SlipwaysContext db,
             IDistributedCache cache,
+            IMemoryCache memoryCache,
             ILogger<RepositoryBase<Port>> logger) :
-            base(db, cache, logger)
+            base(db, memoryCache, cache, logger)
         {
             Key = Cache.Waters;
         }
@@ -28,8 +30,13 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var ports = await SelectAllAsync();
-            var watersBytes = await DCache.GetAsync(Cache.Waters);
-            var watersAll = watersBytes.ToObject<IEnumerable<Water>>();
+            if(!_cache.TryGetValue(Cache.Waters, out HashSet<Water> watersAll))
+            {
+                watersAll = Db.Waters.ToHashSet();
+                _cache.Set(Cache.Waters, watersAll);
+            }
+            //var watersBytes = await DCache.GetAsync(Cache.Waters);
+            //var watersAll = watersBytes.ToObject<IEnumerable<Water>>();
             var waters = watersAll.Where(_ => waterIds.Contains(_.Id));
             var result = new List<Port>();
             foreach (var water in waters)

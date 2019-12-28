@@ -2,6 +2,7 @@
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace com.b_velop.Slipways.Data.Repositories
@@ -11,7 +12,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public SlipwayExtraRepository(
             SlipwaysContext db,
             IDistributedCache cache,
-            ILogger<RepositoryBase<SlipwayExtra>> logger) : base(db, cache, logger)
+            IMemoryCache memoryCache,
+            ILogger<RepositoryBase<SlipwayExtra>> logger) : base(db, memoryCache, cache, logger)
         {
             Key = Cache.SlipwayExtras;
         }

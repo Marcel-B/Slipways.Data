@@ -2,6 +2,7 @@
 using com.b_velop.Slipways.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,35 @@ namespace com.b_velop.Slipways.Data.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class, IEntity
     {
-        private SlipwaysContext Db;
+        protected SlipwaysContext Db;
+        protected IMemoryCache _cache;
         protected ILogger<RepositoryBase<T>> _logger;
         protected string Key { get; set; }
         protected IDistributedCache DCache { get; }
 
         protected RepositoryBase(
             SlipwaysContext db,
+            IMemoryCache mCache,
             IDistributedCache cache,
             ILogger<RepositoryBase<T>> logger)
         {
             DCache = cache;
             Db = db;
+            _cache = mCache;
             _logger = logger;
         }
 
         public virtual async Task<IEnumerable<T>> SelectAllAsync()
         {
-            var bytes = await DCache.GetAsync(Key);
-            var entities = bytes.ToObject<IEnumerable<T>>();
-            return entities;
+            if(!_cache.TryGetValue(Key, out HashSet<T> values))
+            {
+                var fetch = await Db.Set<T>().ToListAsync();
+                values = fetch.ToHashSet();
+            }
+            return values;
+            //var bytes = await DCache.GetAsync(Key);
+            //var entities = bytes.ToObject<IEnumerable<T>>();
+            //return entities;
         }
 
         public virtual async Task<T> SelectByIdAsync(
@@ -56,10 +66,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             var result = await Db.Set<T>().AddAsync(entity);
             _ = Db.SaveChanges();
             var entities = await SelectAllAsync();
-            var list = entities.ToList();
+            var list = entities.ToHashSet();
             list.Add(result.Entity);
-            await DCache.RemoveAsync(Key);
-            await DCache.SetAsync(Key, list.ToByteArray());
+            _cache.Set(Key, list);
+            //await DCache.RemoveAsync(Key);
+            //await DCache.SetAsync(Key, list.ToByteArray());
             return result.Entity;
         }
 
@@ -75,8 +86,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             var entities = await SelectAllAsync();
             var list = entities.ToList();
             list.AddRange(entity);
-            await DCache.RemoveAsync(Key);
-            await DCache.SetAsync(Key, list.ToByteArray());
+            _cache.Set(Key, list.ToHashSet());
+            //await DCache.RemoveAsync(Key);
+            //await DCache.SetAsync(Key, list.ToByteArray());
             return count;
         }
 
@@ -93,8 +105,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             _ = Db.SaveChanges();
             var dbList = await Db.Set<T>().ToListAsync();
-            await DCache.RemoveAsync(Key);
-            await DCache.SetAsync(Key, dbList.ToByteArray());
+            _cache.Set(Key, dbList.ToHashSet());
+            //await DCache.RemoveAsync(Key);
+            //await DCache.SetAsync(Key, dbList.ToByteArray());
             return cnt;
         }
 
@@ -105,8 +118,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             var result = Db.Set<T>().Update(entity);
             _ = Db.SaveChanges();
             var dbList = await Db.Set<T>().ToListAsync();
-            await DCache.RemoveAsync(Key);
-            await DCache.SetAsync(Key, dbList.ToByteArray());
+            _cache.Set(Key, dbList.ToHashSet());
+            //await DCache.RemoveAsync(Key);
+            //await DCache.SetAsync(Key, dbList.ToByteArray());
             return result.Entity;
         }
 
@@ -142,10 +156,12 @@ namespace com.b_velop.Slipways.Data.Repositories
             try
             {
                 var entities = await SelectAllAsync();
-                var list = entities.ToList();
-                var ne = list.FirstOrDefault(_ => _.Id == id);
-                await DCache.RemoveAsync(Key);
-                await DCache.SetAsync(Key, ne.ToByteArray());
+                var list = entities.ToHashSet();
+                //var ne = list.FirstOrDefault(_ => _.Id == id);
+                list.RemoveWhere(_ => _.Id == id);
+                _cache.Set(Key, list);
+                //await DCache.RemoveAsync(Key);
+                //await DCache.SetAsync(Key, ne.ToByteArray());
                 return result;
             }
             catch (ArgumentNullException e)

@@ -4,6 +4,7 @@ using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public ServiceRepository(
             SlipwaysContext db,
             IDistributedCache cache,
-            ILogger<RepositoryBase<Service>> logger) : base(db, cache, logger)
+            IMemoryCache memoryCache,
+            ILogger<RepositoryBase<Service>> logger) : base(db, memoryCache, cache, logger)
         {
             Key = Cache.Services;
         }
@@ -28,8 +30,13 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var services = await SelectAllAsync();
-            var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
-            var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
+            if(!_cache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
+            {
+                manufacturerServicesAll = Db.ManufacturerServices.ToHashSet();
+                _cache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
+            }
+            //var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
+            //var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
 
             var manufacturerServices = manufacturerServicesAll.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
 

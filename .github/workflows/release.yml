@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Generate build number
-      id: buildnumber
-      uses: einaregilsson/build-number@v1 
-      with:
-        token: ${{secrets.github_token}} 
+    #- name: Generate build number
+    #  id: buildnumber
+    #  uses: einaregilsson/build-number@v1 
+    #  with:
+    #    token: ${{secrets.github_token}} 
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -24,8 +24,8 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: pack
-      run: dotnet pack -p:PackageVersion=2.1.$BUILD_NUMBER -c Release -o ./
-      #run: dotnet pack -p:PackageVersion=2.1.36 -c Release -o ./
+      #run: dotnet pack -p:PackageVersion=2.1.$BUILD_NUMBER -c Release -o ./
+      run: dotnet pack -p:PackageVersion=2.1.37 -c Release -o ./
     - name: directory
       run: ls
     - name: publish

@@ -3,6 +3,7 @@ using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public ExtraRepository(
             SlipwaysContext db,
             IDistributedCache dcache,
-            ILogger<RepositoryBase<Extra>> logger) : base(db, dcache, logger)
+            IMemoryCache memoryCache,
+            ILogger<RepositoryBase<Extra>> logger) : base(db, memoryCache, dcache, logger)
         {
             Key = Cache.Extras;
         }
@@ -27,8 +29,13 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var extras = await SelectAllAsync();
-            var slipwayExtrasBytes = await DCache.GetAsync(Cache.SlipwayExtras);
-            var slipwayExtrasAll = slipwayExtrasBytes.ToObject<IEnumerable<SlipwayExtra>>();
+            if(!_cache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
+            {
+                slipwayExtrasAll = Db.SlipwayExtras.ToHashSet();
+                _cache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
+            }
+            //var slipwayExtrasBytes = await DCache.GetAsync(Cache.SlipwayExtras);
+            //var slipwayExtrasAll = slipwayExtrasBytes.ToObject<IEnumerable<SlipwayExtra>>();
             var extraIds = slipwayExtrasAll.Where(_ => slipwaysIds.Contains(_.SlipwayFk));
             var result = new List<Extra>();
 

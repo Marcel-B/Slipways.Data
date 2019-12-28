@@ -18,7 +18,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public ManufacturerRepository(
             SlipwaysContext db,
             IDistributedCache dcache,
-            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, dcache, logger)
+            IMemoryCache memoryCache,
+            ILogger<RepositoryBase<Manufacturer>> logger) : base(db, memoryCache, dcache, logger)
         {
             Key = Cache.Manufacturers;
         }
@@ -28,8 +29,13 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             var manufacturers = await SelectAllAsync();
-            var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
-            var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
+            if(!_cache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
+            {
+                manufacturerServicesAll = Db.ManufacturerServices.ToHashSet();
+                _cache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
+            }
+            //var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
+            //var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
             var manufacturerServices = manufacturerServicesAll.Where(_ => serviceIds.Contains(_.ServiceFk));
             var result = new List<Manufacturer>();
 

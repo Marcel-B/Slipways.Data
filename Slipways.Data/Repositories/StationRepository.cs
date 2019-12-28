@@ -19,7 +19,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         public StationRepository(
             SlipwaysContext db,
             IDistributedCache dcache,
-            ILogger<RepositoryBase<Station>> logger) : base(db, dcache, logger)
+            IMemoryCache memoryCache,
+            ILogger<RepositoryBase<Station>> logger) : base(db, memoryCache, dcache, logger)
         {
             Key = Cache.Stations;
         }

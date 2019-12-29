@@ -17,15 +17,12 @@ namespace com.b_velop.Slipways.Data.Repositories
         protected IMemoryCache _cache;
         protected ILogger<RepositoryBase<T>> _logger;
         protected string Key { get; set; }
-        protected IDistributedCache DCache { get; }
 
         protected RepositoryBase(
             SlipwaysContext db,
             IMemoryCache mCache,
-            IDistributedCache cache,
             ILogger<RepositoryBase<T>> logger)
         {
-            DCache = cache;
             Db = db;
             _cache = mCache;
             _logger = logger;

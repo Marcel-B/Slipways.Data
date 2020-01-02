@@ -38,12 +38,13 @@ namespace com.b_velop.Slipways.Data.Repositories
                 {
                     var fetch = await Context.Set<T>().ToListAsync(cancellationToken);
                     values = fetch.ToHashSet();
+                    _memoryCache.Set(Key, values);
                 }
                 return values;
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while selecting values", e);
+                _logger.LogError(6666, $"Unexpected error occurred while selecting values", e);
             }
             return default;
         }
@@ -67,16 +68,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while selecting value by ID '{id}'", e);
+                _logger.LogError(6666, $"Unexpected error occurred while selecting value by ID '{id}'", e);
             }
             return default;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
         public virtual async Task<IEnumerable<T>> SelectByConditionAsync(
             Func<T, bool> expression,
             CancellationToken cancellationToken = default)
@@ -96,7 +92,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while selecting value by condition", e);
+                _logger.LogError(6666, $"Unexpected error occurred while selecting value by condition", e);
             }
             return default;
         }
@@ -137,7 +133,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while inserting new entity to database", e);
+                _logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database", e);
             }
             return default;
         }
@@ -176,7 +172,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while insert values range", e);
+                _logger.LogError(6666, $"Unexpected error occurred while insert values range", e);
             }
             return default;
         }
@@ -213,7 +209,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while updating values range", e);
+                _logger.LogError(6666, $"Unexpected error occurred while updating values range", e);
             }
             return default;
         }
@@ -244,7 +240,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while updating value", e);
+                _logger.LogError(6666, $"Unexpected error occurred while updating value", e);
             }
             return default;
         }
@@ -262,7 +258,7 @@ namespace com.b_velop.Slipways.Data.Repositories
                 var tmp = await Context.Set<T>().FirstOrDefaultAsync(_ => _.Id == id, cancellationToken);
                 if (tmp == null)
                 {
-                    _logger.LogWarning(5555, $"Can't delete Entity with ID '{id}' - Entity not exsists");
+                    _logger.LogWarning(5000, $"Can't delete Entity with ID '{id}' - Entity not exsists");
                     return null;
                 }
                 result = Context.Set<T>().Remove(tmp).Entity;
@@ -270,11 +266,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(2323, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                _logger.LogError(6664, $"Error occurred while remove Entity with ID '{id}' from Database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(2424, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                _logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Database", e);
             }
             catch (Exception e)
             {
@@ -290,11 +286,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(5656, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+                _logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+                _logger.LogError(6666, $"Unexpected error occurred while remove Entity with ID '{id}' from Cache", e);
             }
             return null;
         }

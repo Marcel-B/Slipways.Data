@@ -32,7 +32,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 options.UseSqlServer(connectionString);
                 options.EnableDetailedErrors(true);
                 options.EnableSensitiveDataLogging(true);
-            });
+            }, ServiceLifetime.Transient);
 
             return services;
         }

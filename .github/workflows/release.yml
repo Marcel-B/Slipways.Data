@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release
     - name: pack
       #run: dotnet pack -p:PackageVersion=2.1.$BUILD_NUMBER -c Release -o ./
-      run: dotnet pack -p:PackageVersion=2.1.42 -c Release -o ./
+      run: dotnet pack -p:PackageVersion=2.1.43 -c Release -o ./
     - name: directory
       run: ls
     - name: publish

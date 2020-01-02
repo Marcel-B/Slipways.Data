@@ -14,20 +14,20 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class WaterRepository : RepositoryBase<Water>, IWaterRepository
     {
         public WaterRepository(
-             SlipwaysContext db,
+            SlipwaysContext db,
             IMemoryCache memoryCache,
-             ILogger<RepositoryBase<Water>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Water>> logger) : base(db, memoryCache, logger)
         {
             Key = Cache.Waters;
         }
 
-        public async Task<IDictionary<Guid, Water>> GetWatersByIdAsync(
+        public async Task<ILookup<Guid, Water>> GetWatersByIdAsync(
             IEnumerable<Guid> waterIds,
-             CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
         {
             var waters = await SelectAllAsync();
             var result = waters.Where(_ => waterIds.Contains(_.Id));
-            return result.ToDictionary(x => x.Id);
+            return result.ToLookup(x => x.Id);
         }
     }
 }

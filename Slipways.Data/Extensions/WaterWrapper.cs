@@ -28,5 +28,19 @@ namespace com.b_velop.Slipways.Data.Extensions
             };
             return water;
         }
+
+        public static Water Copy(
+            this Water w)
+        {
+            var water = new Water
+            {
+                Id = w.Id,
+                Created = w.Created,
+                Longname = w.Longname,
+                Shortname = w.Shortname,
+                Updated = w.Updated,
+            };
+            return water;
+        }
     }
 }

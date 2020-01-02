@@ -14,15 +14,11 @@ namespace com.b_velop.Slipways.Data.Repositories
 {
     public class SlipwayRepository : RepositoryBase<Slipway>, ISlipwayRepository
     {
-        private IExtraRepository _extraRepository;
-
         public SlipwayRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            IExtraRepository extraRepository,
-            ILogger<RepositoryBase<Slipway>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Slipway>> logger) : base(context, memoryCache, logger)
         {
-            _extraRepository = extraRepository;
             Key = Cache.Slipways;
         }
 
@@ -30,55 +26,85 @@ namespace com.b_velop.Slipways.Data.Repositories
          IEnumerable<Guid> waterIds,
          CancellationToken cancellationToken)
         {
-            var slipways = await SelectAllAsync();
-            var result = new List<Slipway>();
-            foreach (var slipway in slipways)
-                if (waterIds.Contains(slipway.WaterFk))
-                    result.Add(slipway);
-            return result.ToLookup(x => x.WaterFk);
+            if (waterIds == null)
+                throw new ArgumentNullException("WaterIDs were null");
+
+            try
+            {
+                var slipways = await SelectAllAsync(cancellationToken);
+                var result = new List<Slipway>();
+
+                foreach (var slipway in slipways)
+                    if (waterIds.Contains(slipway.WaterFk))
+                        result.Add(slipway);
+
+                return result.ToLookup(x => x.WaterFk);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Slipways by WaterIDs", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Slipways by WaterIDs", e);
+            }
+            return default;
         }
 
         public async Task<ILookup<Guid, Slipway>> GetSlipwaysByExtraIdAsync(
              IEnumerable<Guid> extraIds,
              CancellationToken cancellationToken)
         {
-            var slipways = await SelectAllAsync();
-            if(!_cache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
-            {
-                slipwayExtrasAll = Db.SlipwayExtras.ToHashSet();
-                _cache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
-            }
-            //var slipwayExtrasByte = await DCache.GetAsync(Cache.SlipwayExtras);
-            //var slipwayExtrasAll = slipwayExtrasByte.ToObject<IEnumerable<SlipwayExtra>>();
-            var slipwayExtras = slipwayExtrasAll.Where(_ => extraIds.Contains(_.ExtraFk));
+            if (extraIds == null)
+                throw new ArgumentNullException("ExtraIDs were null");
 
-            var result = new List<Slipway>();
-
-            foreach (var slipwayExtra in slipwayExtras)
+            try
             {
-                var slipway = slipways.FirstOrDefault(_ => _.Id == slipwayExtra.SlipwayFk);
-                if (slipway != null)
-                    result.Add(new Slipway
-                    {
-                        Id = slipway.Id,
-                        ExtraFk = slipwayExtra.ExtraFk,
-                        City = slipway.City,
-                        Latitude = slipway.Latitude,
-                        Longitude = slipway.Longitude,
-                        Name = slipway.Name,
-                        Postalcode = slipway.Postalcode,
-                        WaterFk = slipway.WaterFk,
-                        Updated = slipway.Updated,
-                        Street = slipway.Street,
-                        Rating = slipway.Rating,
-                        Pro = slipway.Pro,
-                        Created = slipway.Created,
-                        Costs = slipway.Costs,
-                        Contra = slipway.Contra,
-                        Comment = slipway.Comment
-                    });
+                var slipways = await SelectAllAsync(cancellationToken);
+                if (!_memoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
+                {
+                    slipwayExtrasAll = Context.SlipwayExtras.ToHashSet();
+                    _memoryCache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
+                }
+                var slipwayExtras = slipwayExtrasAll.Where(_ => extraIds.Contains(_.ExtraFk));
+
+                var result = new List<Slipway>();
+
+                foreach (var slipwayExtra in slipwayExtras)
+                {
+                    var slipway = slipways.FirstOrDefault(_ => _.Id == slipwayExtra.SlipwayFk);
+                    if (slipway != null)
+                        result.Add(new Slipway
+                        {
+                            Id = slipway.Id,
+                            ExtraFk = slipwayExtra.ExtraFk,
+                            City = slipway.City,
+                            Latitude = slipway.Latitude,
+                            Longitude = slipway.Longitude,
+                            Name = slipway.Name,
+                            Postalcode = slipway.Postalcode,
+                            WaterFk = slipway.WaterFk,
+                            Updated = slipway.Updated,
+                            Street = slipway.Street,
+                            Rating = slipway.Rating,
+                            Pro = slipway.Pro,
+                            Created = slipway.Created,
+                            Costs = slipway.Costs,
+                            Contra = slipway.Contra,
+                            Comment = slipway.Comment
+                        });
+                }
+                return result.ToLookup(x => x.ExtraFk);
             }
-            return result.ToLookup(x => x.ExtraFk);
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Slipways by ExtraIDs", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Slipways by ExtraIDs", e);
+            }
+            return default;
         }
     }
 }

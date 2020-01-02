@@ -5,7 +5,7 @@ namespace com.b_velop.Slipways.Data.Repositories
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        private readonly SlipwaysContext _db;
+        //private readonly SlipwaysContext _context;
         private readonly ILogger<RepositoryWrapper> _logger;
 
         public IWaterRepository Water { get; }
@@ -19,7 +19,7 @@ namespace com.b_velop.Slipways.Data.Repositories
         public IManufacturerServicesRepository ManufacturerServices { get; }
 
         public RepositoryWrapper(
-            SlipwaysContext db,
+            //SlipwaysContext context,
             IWaterRepository waterRepository,
             IStationRepository stationRepository,
             ISlipwayRepository slipwayRepository,
@@ -31,7 +31,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             IManufacturerServicesRepository manufacturerServicesRepository,
             ILogger<RepositoryWrapper> logger)
         {
-            _db = db;
+            //_context = context;
             Water = waterRepository;
             Station = stationRepository;
             Slipway = slipwayRepository;

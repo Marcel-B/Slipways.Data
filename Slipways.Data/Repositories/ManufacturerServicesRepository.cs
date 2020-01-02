@@ -9,9 +9,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class ManufacturerServicesRepository : RepositoryBase<ManufacturerService>, IManufacturerServicesRepository
     {
         public ManufacturerServicesRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<ManufacturerService>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<ManufacturerService>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.ManufacturerServices;
         }

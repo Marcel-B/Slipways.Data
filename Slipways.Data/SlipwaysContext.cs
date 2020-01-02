@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace com.b_velop.Slipways.Data
 {
-
     public class SlipwaysContext : DbContext
     {
         public DbSet<Water> Waters { get; set; }
@@ -28,8 +27,6 @@ namespace com.b_velop.Slipways.Data
 
         protected override void OnModelCreating(
               ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+            => base.OnModelCreating(modelBuilder);
     }
 }

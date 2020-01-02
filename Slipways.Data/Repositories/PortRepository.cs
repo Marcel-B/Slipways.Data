@@ -14,9 +14,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class PortRepository : RepositoryBase<Port>, IPortRepository
     {
         public PortRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<Port>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Port>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.Waters;
         }
@@ -25,23 +25,40 @@ namespace com.b_velop.Slipways.Data.Repositories
             IEnumerable<Guid> waterIds,
             CancellationToken cancellationToken)
         {
-            var ports = await SelectAllAsync();
-            if (!_cache.TryGetValue(Cache.Waters, out HashSet<Water> watersAll))
+            if (waterIds == null)
+                throw new ArgumentNullException("WaterIDs were null");
+
+            try
             {
-                watersAll = Db.Waters.ToHashSet();
-                _cache.Set(Cache.Waters, watersAll);
+                var ports = await SelectAllAsync(cancellationToken);
+
+                if (!_memoryCache.TryGetValue(Cache.Waters, out HashSet<Water> watersAll))
+                {
+                    watersAll = Context.Waters.ToHashSet();
+                    _memoryCache.Set(Cache.Waters, watersAll);
+                }
+
+                var waters = watersAll.Where(_ => waterIds.Contains(_.Id));
+                var result = new List<Port>();
+
+                foreach (var water in waters)
+                {
+                    var port = ports.FirstOrDefault(_ => _.WaterFk == water.Id);
+                    if (port != null)
+                        result.Add(port);
+                }
+
+                return result.ToLookup(_ => _.WaterFk);
             }
-            //var watersBytes = await DCache.GetAsync(Cache.Waters);
-            //var watersAll = watersBytes.ToObject<IEnumerable<Water>>();
-            var waters = watersAll.Where(_ => waterIds.Contains(_.Id));
-            var result = new List<Port>();
-            foreach (var water in waters)
+            catch (ArgumentNullException e)
             {
-                var port = ports.FirstOrDefault(_ => _.WaterFk == water.Id);
-                if (port != null)
-                    result.Add(port);
+                _logger.LogError(6665, $"Error occurred while getting Ports by WaterIDs", e);
             }
-            return result.ToLookup(_ => _.WaterFk);
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Ports by WaterIDs", e);
+            }
+            return default;
         }
     }
 }

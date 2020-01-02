@@ -15,9 +15,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class ServiceRepository : RepositoryBase<Service>, IServiceRepository
     {
         public ServiceRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<Service>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Service>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.Services;
         }
@@ -26,41 +26,54 @@ namespace com.b_velop.Slipways.Data.Repositories
             IEnumerable<Guid> manufacturerIds,
             CancellationToken cancellationToken)
         {
-            var services = await SelectAllAsync();
-            if(!_cache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
+            if (manufacturerIds == null)
+                throw new ArgumentNullException("ManufacturerIDs were null");
+
+            try
             {
-                manufacturerServicesAll = Db.ManufacturerServices.ToHashSet();
-                _cache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
+                var services = await SelectAllAsync(cancellationToken);
+                if (!_memoryCache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
+                {
+                    manufacturerServicesAll = Context.ManufacturerServices.ToHashSet();
+                    _memoryCache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
+                }
+
+                var manufacturerServices = manufacturerServicesAll.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
+                var result = new List<Service>();
+
+                foreach (var manufacturerService in manufacturerServices)
+                {
+                    var service = services.FirstOrDefault(_ => _.Id == manufacturerService.ServiceFk);
+
+                    if (service != null)
+                        result.Add(new Service
+                        {
+                            Id = service.Id,
+                            Name = service.Name,
+                            Street = service.Street,
+                            Postalcode = service.Postalcode,
+                            City = service.City,
+                            Phone = service.Phone,
+                            Url = service.Url,
+                            Updated = service.Updated,
+                            Longitude = service.Longitude,
+                            Latitude = service.Latitude,
+                            Email = service.Email,
+                            Created = service.Created,
+                            ManufacturerFk = manufacturerService.ManufacturerFk
+                        });
+                }
+                return result.ToLookup(_ => _.ManufacturerFk);
             }
-            //var manufacturerServicesBytes = await DCache.GetAsync(Cache.ManufacturerServices);
-            //var manufacturerServicesAll = manufacturerServicesBytes.ToObject<IEnumerable<ManufacturerService>>();
-
-            var manufacturerServices = manufacturerServicesAll.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
-
-            var result = new List<Service>();
-
-            foreach (var manufacturerService in manufacturerServices)
+            catch (ArgumentNullException e)
             {
-                var service = services.FirstOrDefault(_ => _.Id == manufacturerService.ServiceFk);
-                if (service != null)
-                    result.Add(new Service
-                    {
-                        Id = service.Id,
-                        Name = service.Name,
-                        Street = service.Street,
-                        Postalcode = service.Postalcode,
-                        City = service.City,
-                        Phone = service.Phone,
-                        Url = service.Url,
-                        Updated = service.Updated,
-                        Longitude = service.Longitude,
-                        Latitude = service.Latitude,
-                        Email = service.Email,
-                        Created = service.Created,
-                        ManufacturerFk = manufacturerService.ManufacturerFk
-                    });
+                _logger.LogError(6665, $"Error occurred while getting Services by ManufacturerIDs", e);
             }
-            return result.ToLookup(_ => _.ManufacturerFk);
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Services by ManufacturerIDs", e);
+            }
+            return default;
         }
     }
 }

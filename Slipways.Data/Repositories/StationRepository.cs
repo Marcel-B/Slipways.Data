@@ -15,9 +15,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class StationRepository : RepositoryBase<Station>, IStationRepository
     {
         public StationRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<Station>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Station>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.Stations;
         }
@@ -26,9 +26,24 @@ namespace com.b_velop.Slipways.Data.Repositories
              IEnumerable<Guid> waterIds,
              CancellationToken cancellationToken)
         {
-            var stations = await SelectAllAsync();
-            var result = stations.Where(_ => waterIds.Contains(_.WaterFk));
-            return result.ToLookup(x => x.WaterFk);
+            if (waterIds == null)
+                throw new ArgumentNullException("WaterIDs were null");
+
+            try
+            {
+                var stations = await SelectAllAsync(cancellationToken);
+                var result = stations.Where(_ => waterIds.Contains(_.WaterFk));
+                return result.ToLookup(x => x.WaterFk);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Stations by WaterIds", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Stations by WaterIds", e);
+            }
+            return default;
         }
     }
 }

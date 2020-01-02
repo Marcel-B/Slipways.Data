@@ -9,9 +9,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class SlipwayExtraRepository : RepositoryBase<SlipwayExtra>, ISlipwayExtraRepository
     {
         public SlipwayExtraRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<SlipwayExtra>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<SlipwayExtra>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.SlipwayExtras;
         }

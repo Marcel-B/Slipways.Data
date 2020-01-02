@@ -14,9 +14,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public class WaterRepository : RepositoryBase<Water>, IWaterRepository
     {
         public WaterRepository(
-            SlipwaysContext db,
+            SlipwaysContext context,
             IMemoryCache memoryCache,
-            ILogger<RepositoryBase<Water>> logger) : base(db, memoryCache, logger)
+            ILogger<RepositoryBase<Water>> logger) : base(context, memoryCache, logger)
         {
             Key = Cache.Waters;
         }
@@ -25,9 +25,28 @@ namespace com.b_velop.Slipways.Data.Repositories
             IEnumerable<Guid> waterIds,
             CancellationToken cancellationToken)
         {
-            var waters = await SelectAllAsync();
-            var result = waters.Where(_ => waterIds.Contains(_.Id));
-            return result.ToDictionary(x => x.Id);
+            if (waterIds == null)
+                throw new ArgumentNullException("WaterIds were null");
+
+            try
+            {
+                var waters = await SelectAllAsync(cancellationToken);
+                var result = waters.Where(_ => waterIds.Contains(_.Id));
+                return result.ToDictionary(x => x.Id);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6664, $"Error occurred while getting Waters by ID", e);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Waters by ID", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Waters by ID", e);
+            }
+            return default;
         }
     }
 }

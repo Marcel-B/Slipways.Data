@@ -2,6 +2,8 @@ using com.b_velop.Slipways.Data.Extensions;
 using com.b_velop.Slipways.Data.Models;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Slipways.Data.Tests
 {
@@ -30,6 +32,28 @@ namespace Slipways.Data.Tests
 
             // Assert
             Assert.IsEmpty(actual);
+        }
+
+        [Test]
+        public void SlipwayWrapper_ToDto_ExtrasAreWrappedCorrectly()
+        {
+            // Arrange
+            var expected = 2;
+            var slipway = new Slipway
+            {
+                Id = Guid.Parse("F2638A1A-9F5C-4858-BC04-786149E9ECFF"),
+                Name = "Test",
+                City = "Köln",
+                WaterFk = Guid.Parse("5790B3B2-A002-45C3-821D-6D8EC194397E"),
+                Extras = new List<Extra> { new Extra { Id = Guid.NewGuid(), Name = "Eins" }, new Extra { Id = Guid.NewGuid(), Name = "Zwei" } }
+            };
+
+            // Act
+            var extras = slipway.ToDto().Extras;
+            var actual = extras.ToList().Count;
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }

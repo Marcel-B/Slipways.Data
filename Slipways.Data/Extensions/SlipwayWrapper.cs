@@ -26,7 +26,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Created = s.Created,
                 Id = s.Id,
                 Updated = s.Updated,
-                PortFk = s.PortFk,
+                PortFk = s.PortFk ?? Guid.Empty,
                 WaterFk = s.WaterFk,
                 Port = s.Port?.ToDto(),
                 Water = s.Water?.ToDto(),

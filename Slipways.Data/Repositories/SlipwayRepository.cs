@@ -22,9 +22,38 @@ namespace com.b_velop.Slipways.Data.Repositories
             Key = Cache.Slipways;
         }
 
-        public async Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(
-         IEnumerable<Guid> waterIds,
-         CancellationToken cancellationToken)
+        public async Task<ILookup<Guid, Slipway>> GetSlipwaysByPortIdAsync(
+            IEnumerable<Guid> portIds,
+            CancellationToken cancellationToken)
+        {
+            if (portIds == null)
+                throw new ArgumentNullException("PortIDs were null");
+
+            try
+            {
+                var slipways = await SelectAllAsync(cancellationToken);
+                var result = new List<Slipway>();
+
+                foreach (var slipway in slipways)
+                    if (portIds.Contains(slipway.PortFk))
+                        result.Add(slipway);
+
+                return result.ToLookup(x => x.PortFk);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Slipways by PortIDs", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Slipways by PortIDs", e);
+            }
+            return default;
+        }
+
+            public async Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(
+                IEnumerable<Guid> waterIds,
+                CancellationToken cancellationToken)
         {
             if (waterIds == null)
                 throw new ArgumentNullException("WaterIDs were null");

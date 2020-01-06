@@ -17,7 +17,7 @@ namespace com.b_velop.Slipways.Data.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        public Guid PortFk { get; set; }
+        public Guid? PortFk { get; set; }
 
         [ForeignKey("PortFk")]
         public Port Port { get; set; }

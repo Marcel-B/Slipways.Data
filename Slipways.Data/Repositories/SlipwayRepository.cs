@@ -35,10 +35,10 @@ namespace com.b_velop.Slipways.Data.Repositories
                 var result = new List<Slipway>();
 
                 foreach (var slipway in slipways)
-                    if (portIds.Contains(slipway.PortFk))
+                    if (portIds.Contains(slipway.PortFk ?? Guid.Empty))
                         result.Add(slipway);
 
-                return result.ToLookup(x => x.PortFk);
+                return result.ToLookup(x => x.PortFk ?? Guid.Empty);
             }
             catch (ArgumentNullException e)
             {

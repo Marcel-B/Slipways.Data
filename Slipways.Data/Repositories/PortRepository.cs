@@ -18,7 +18,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             IMemoryCache memoryCache,
             ILogger<RepositoryBase<Port>> logger) : base(context, memoryCache, logger)
         {
-            Key = Cache.Waters;
+            Key = Cache.Ports;
         }
 
         public async Task<ILookup<Guid, Port>> GetPortsByWaterIdAsync(

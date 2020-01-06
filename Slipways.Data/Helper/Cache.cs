@@ -11,5 +11,6 @@
         public const string SlipwayPorts = "SlipwayPorts";
         public const string Slipways = "Slipways";
         public const string Services = "Services";
+        public const string Ports = "Ports";
     }
 }

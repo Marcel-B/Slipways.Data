@@ -50,7 +50,8 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Latitude = s.Latitude,
                 Created = s.Created,
                 Id = s.Id,
-                Updated = s.Updated
+                Updated = s.Updated,
+                Extras = s.Extras?.Select(_ => _.ToClass()).ToList(),
             };
             return slipway;
         }

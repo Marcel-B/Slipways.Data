@@ -11,26 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    #- name: Generate build number
-    #  id: buildnumber
-    #  uses: einaregilsson/build-number@v1 
-    #  with:
-    #    token: ${{secrets.github_token}} 
     - uses: actions/checkout@v1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
-    - name: Build with dotnet
+    - name: Build
       run: dotnet build --configuration Release
-    - name: pack
-      #run: dotnet pack -p:PackageVersion=2.1.$BUILD_NUMBER -c Release -o ./
-      run: dotnet pack -p:PackageVersion=2.1.45 -c Release -o ./
-    - name: directory
-      run: ls
-    - name: publish
+    - name: Test
+      run: dotnet test --configuration Release
+    - name: Pack
+      run: dotnet pack -p:PackageVersion=2.1.46 -c Release -o ./
+    - name: Publish to Nexus
       env:
         super_secret: ${{ secrets.NEXUS }} 
       run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret *.nupkg
-    - name: clean
+    - name: Clean Packages
       run: rm *.nupkg

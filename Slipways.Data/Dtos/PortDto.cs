@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace com.b_velop.Slipways.Data.Dtos
@@ -46,5 +47,8 @@ namespace com.b_velop.Slipways.Data.Dtos
 
         [JsonPropertyName("waterFk")]
         public Guid WaterFk { get; set; }
+
+        [JsonPropertyName("slipways")]
+        public IEnumerable<SlipwayDto> Slipways { get; set; }
     }
 }

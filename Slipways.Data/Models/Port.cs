@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
@@ -13,6 +14,9 @@ namespace com.b_velop.Slipways.Data.Models
         public string City { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
+
+        //[NotMapped]
+        public IEnumerable<Slipway> Slipways { get; set; }
 
         [ForeignKey("WaterFk")]
         public Water Water { get; set; }

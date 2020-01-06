@@ -1,5 +1,6 @@
 ﻿using com.b_velop.Slipways.Data.Dtos;
 using com.b_velop.Slipways.Data.Models;
+using System.Linq;
 
 namespace com.b_velop.Slipways.Data.Extensions
 {
@@ -23,6 +24,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Street = p.Street,
                 Updated = p.Updated,
                 Url = p.Url,
+                Slipways = p.Slipways?.Select(_ => _.ToClass()),
                 Water = p.Water?.ToClass()
             };
             return port;
@@ -45,6 +47,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Street = p.Street,
                 Updated = p.Updated,
                 Url = p.Url,
+                Slipways = p.Slipways?.Select(_ => _.ToDto()),
                 Water = p.Water?.ToDto(),
                 WaterFk = p.WaterFk,
             };

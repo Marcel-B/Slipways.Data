@@ -1,5 +1,6 @@
 ﻿using com.b_velop.Slipways.Data.Dtos;
 using com.b_velop.Slipways.Data.Models;
+using System;
 using System.Linq;
 
 namespace com.b_velop.Slipways.Data.Extensions
@@ -54,6 +55,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Created = s.Created,
                 Id = s.Id,
                 Updated = s.Updated,
+                Port = s.Port?.ToClass(),
                 Extras = s.Extras?.Select(_ => _.ToClass()).ToList(),
             };
             return slipway;

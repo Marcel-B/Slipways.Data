@@ -16,7 +16,6 @@ namespace com.b_velop.Slipways.Data.Repositories
         public IPortRepository Port { get; }
         public ISlipwayExtraRepository SlipwayExtra { get; }
         public IManufacturerServicesRepository ManufacturerServices { get; }
-        public ISlipwayPortRepository SlipwayPort { get; }
 
         public RepositoryWrapper(
             IWaterRepository waterRepository,
@@ -28,7 +27,6 @@ namespace com.b_velop.Slipways.Data.Repositories
             IPortRepository portRepository,
             ISlipwayExtraRepository slipwayExtraRepository,
             IManufacturerServicesRepository manufacturerServicesRepository,
-            ISlipwayPortRepository slipwayPortRepository,
             ILogger<RepositoryWrapper> logger)
         {
             Water = waterRepository;
@@ -40,7 +38,6 @@ namespace com.b_velop.Slipways.Data.Repositories
             Port = portRepository;
             SlipwayExtra = slipwayExtraRepository;
             ManufacturerServices = manufacturerServicesRepository;
-            SlipwayPort = slipwayPortRepository;
             _logger = logger;
         }
     }

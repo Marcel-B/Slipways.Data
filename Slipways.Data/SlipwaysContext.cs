@@ -15,7 +15,6 @@ namespace com.b_velop.Slipways.Data
         public DbSet<Port> Ports { get; set; }
         public DbSet<Extra> Extras { get; set; }
         public DbSet<SlipwayExtra> SlipwayExtras { get; set; }
-        public DbSet<SlipwayPort> SlipwayPorts { get; set; }
 
         private readonly ILogger<SlipwaysContext> _logger;
 
@@ -28,6 +27,13 @@ namespace com.b_velop.Slipways.Data
 
         protected override void OnModelCreating(
               ModelBuilder modelBuilder)
-            => base.OnModelCreating(modelBuilder);
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder
+                .Entity<Slipway>()
+                .HasOne(_ => _.Port)
+                .WithMany(_ => _.Slipways)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

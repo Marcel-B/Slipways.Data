@@ -11,7 +11,11 @@ namespace com.b_velop.Slipways.Data.Models
         [Key]
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
+
+        [Display(Name = "Erstellt")]
         public DateTime Created { get; set; }
+
+        [Display(Name = "Geändert")]
         public DateTime? Updated { get; set; }
     }
 }

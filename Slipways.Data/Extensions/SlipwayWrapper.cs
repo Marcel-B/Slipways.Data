@@ -12,7 +12,6 @@ namespace com.b_velop.Slipways.Data.Extensions
             var slipway = new SlipwayDto
             {
                 Name = s.Name,
-                WaterFk = s.WaterFk,
                 Rating = s.Rating,
                 Comment = s.Comment,
                 Street = s.Street,
@@ -26,6 +25,10 @@ namespace com.b_velop.Slipways.Data.Extensions
                 Created = s.Created,
                 Id = s.Id,
                 Updated = s.Updated,
+                PortFk = s.PortFk,
+                WaterFk = s.WaterFk,
+                Port = s.Port?.ToDto(),
+                Water = s.Water?.ToDto(),
                 Extras = s.Extras?.Select(_ => _.ToDto())
             };
             return slipway;

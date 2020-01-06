@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
@@ -12,6 +13,7 @@ namespace com.b_velop.Slipways.Data.Models
             Services = new HashSet<Manufacturer>();
         }
 
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         [NotMapped]

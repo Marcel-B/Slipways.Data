@@ -19,6 +19,7 @@ namespace com.b_velop.Slipways.Data.Extensions
             services.AddScoped<IPortRepository, PortRepository>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<ISlipwayPortRepository, SlipwayPortRepository>();
             services.AddScoped<ISlipwayExtraRepository, SlipwayExtraRepository>();
             services.AddScoped<ISlipwayRepository, SlipwayRepository>();
             services.AddScoped<IStationRepository, StationRepository>();

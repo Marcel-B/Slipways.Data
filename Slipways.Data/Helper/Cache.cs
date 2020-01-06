@@ -8,6 +8,7 @@
         public const string Waters = "Waters";
         public const string ManufacturerServices = "ManufacturerServices";
         public const string SlipwayExtras = "SlipwayExtras";
+        public const string SlipwayPorts = "SlipwayPorts";
         public const string Slipways = "Slipways";
         public const string Services = "Services";
     }

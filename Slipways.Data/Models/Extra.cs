@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace com.b_velop.Slipways.Data.Models
@@ -11,6 +12,8 @@ namespace com.b_velop.Slipways.Data.Models
         {
             Slipways = new List<Slipway>();
         }
+
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         [NotMapped]

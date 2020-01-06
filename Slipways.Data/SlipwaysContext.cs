@@ -15,6 +15,7 @@ namespace com.b_velop.Slipways.Data
         public DbSet<Port> Ports { get; set; }
         public DbSet<Extra> Extras { get; set; }
         public DbSet<SlipwayExtra> SlipwayExtras { get; set; }
+        public DbSet<SlipwayPort> SlipwayPorts { get; set; }
 
         private readonly ILogger<SlipwaysContext> _logger;
 

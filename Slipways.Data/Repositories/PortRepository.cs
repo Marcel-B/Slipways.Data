@@ -21,6 +21,34 @@ namespace com.b_velop.Slipways.Data.Repositories
             Key = Cache.Ports;
         }
 
+        public async Task<IDictionary<Guid, Port>> GetPortsByIdAsync(
+            IEnumerable<Guid> portIds,
+            CancellationToken cancellationToken)
+        {
+            if (portIds == null)
+                throw new ArgumentNullException("PortIds were null");
+
+            try
+            {
+                var ports = await SelectAllAsync(cancellationToken);
+                var result = ports.Where(_ => portIds.Contains(_.Id));
+                return result.ToDictionary(x => x.Id);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(6664, $"Error occurred while getting Ports by ID", e);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError(6665, $"Error occurred while getting Ports by ID", e);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while getting Ports by ID", e);
+            }
+            return default;
+        }
+
         public async Task<ILookup<Guid, Port>> GetPortsByWaterIdAsync(
             IEnumerable<Guid> waterIds,
             CancellationToken cancellationToken)

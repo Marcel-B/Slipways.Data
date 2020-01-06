@@ -30,7 +30,6 @@ namespace com.b_velop.Slipways.Data.Repositories
 
             try
             {
-
                 var extras = await SelectAllAsync(cancellationToken);
 
                 if (!_memoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))

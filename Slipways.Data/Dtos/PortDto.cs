@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using com.b_velop.Slipways.Data.Contracts;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
-    public class PortDto
+    public class PortDto : IDto
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }

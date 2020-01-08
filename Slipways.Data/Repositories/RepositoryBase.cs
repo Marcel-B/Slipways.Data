@@ -133,7 +133,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database", e);
+                _logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database\n{e.Message}\n{e.StackTrace}", e);
             }
             return default;
         }

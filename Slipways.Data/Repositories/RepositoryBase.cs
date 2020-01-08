@@ -105,7 +105,8 @@ namespace com.b_velop.Slipways.Data.Repositories
         /// <exception cref="ArgumentNullException">Throwed when entity is null</exception>
         public virtual async Task<T> InsertAsync(
             T entity,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool saveChanges = true)
         {
             if (entity == null)
                 throw new ArgumentNullException("Entity was null");
@@ -115,7 +116,9 @@ namespace com.b_velop.Slipways.Data.Repositories
                 entity.Id = Guid.NewGuid();
 
                 var result = await Context.Set<T>().AddAsync(entity, cancellationToken);
-                _ = Context.SaveChanges();
+
+                if (saveChanges)
+                    _ = Context.SaveChanges();
 
                 var entities = await SelectAllAsync(cancellationToken);
                 var list = entities.ToHashSet();
@@ -140,7 +143,8 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public virtual async Task<int> InsertRangeAsync(
             IEnumerable<T> entities,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool saveChanges = true)
         {
             if (entities == null)
                 throw new ArgumentNullException("Entities were null");
@@ -151,7 +155,9 @@ namespace com.b_velop.Slipways.Data.Repositories
                     entity.Created = DateTime.Now;
 
                 await Context.Set<T>().AddRangeAsync(entities, cancellationToken);
-                var count = Context.SaveChanges();
+                int count = 0;
+                if (saveChanges)
+                    count = Context.SaveChanges();
                 var allEntities = await SelectAllAsync(cancellationToken);
                 var list = allEntities.ToList();
                 list.AddRange(allEntities);
@@ -179,7 +185,8 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public virtual async Task<int> UpdateRangeAsync(
             IEnumerable<T> entities,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool saveChanges = true)
         {
             if (entities == null)
                 throw new ArgumentNullException("The entities were null");
@@ -194,7 +201,8 @@ namespace com.b_velop.Slipways.Data.Repositories
                     if (dbResult != null)
                         cnt++;
                 }
-                _ = Context.SaveChanges();
+                if (saveChanges)
+                    _ = Context.SaveChanges();
                 var contextResult = await Context.Set<T>().ToListAsync(cancellationToken);
                 _memoryCache.Set(Key, contextResult.ToHashSet());
                 return cnt;
@@ -216,7 +224,8 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public virtual async Task<T> UpdateAsync(
             T entity,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool saveChanges = true)
         {
             if (entity == null)
                 throw new ArgumentNullException("Entity is null");
@@ -225,7 +234,8 @@ namespace com.b_velop.Slipways.Data.Repositories
             {
                 entity.Updated = DateTime.Now;
                 var result = Context.Set<T>().Update(entity);
-                _ = Context.SaveChanges();
+                if (saveChanges)
+                    _ = Context.SaveChanges();
                 var dbList = await Context.Set<T>().ToListAsync(cancellationToken);
                 _memoryCache.Set(Key, dbList.ToHashSet());
                 return result.Entity;
@@ -247,7 +257,8 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public virtual async Task<T> DeleteAsync(
             Guid id,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool saveChanges = true)
         {
             if (id == Guid.Empty)
                 throw new ArgumentNullException("Id is null");
@@ -262,7 +273,8 @@ namespace com.b_velop.Slipways.Data.Repositories
                     return null;
                 }
                 result = Context.Set<T>().Remove(tmp).Entity;
-                _ = Context.SaveChanges();
+                if (saveChanges)
+                    _ = Context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException e)
             {

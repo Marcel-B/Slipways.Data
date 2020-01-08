@@ -1,5 +1,6 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace com.b_velop.Slipways.Data.Repositories
 {
@@ -46,7 +47,14 @@ namespace com.b_velop.Slipways.Data.Repositories
 
         public void SaveChanges()
         {
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Unexpected error occurred while saving context\n{e.Message}\n{e.StackTrace}\n{e.InnerException}", e);
+            }
         }
     }
 }

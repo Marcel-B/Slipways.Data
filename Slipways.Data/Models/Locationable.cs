@@ -9,7 +9,7 @@ namespace com.b_velop.Slipways.Data.Models
         [Display(Name = "Breitengrad")]
         public double Latitude { get; set; }
         
-        [Display(Name = "Breitengrad")]
+        [Display(Name = "Längengrad")]
         public double Longitude { get; set; }
     }
 }

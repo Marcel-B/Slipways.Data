@@ -9,7 +9,8 @@ namespace com.b_velop.Slipways.Data.Extensions
     {
         public static IServiceCollection AddSlipwaysData(
             this IServiceCollection services,
-            string connectionString = null)
+            string connectionString = null,
+            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             services.AddMemoryCache();
 
@@ -32,7 +33,7 @@ namespace com.b_velop.Slipways.Data.Extensions
                 options.UseSqlServer(connectionString);
                 options.EnableDetailedErrors(true);
                 options.EnableSensitiveDataLogging(true);
-            }, ServiceLifetime.Transient);
+            }, serviceLifetime);
 
             return services;
         }

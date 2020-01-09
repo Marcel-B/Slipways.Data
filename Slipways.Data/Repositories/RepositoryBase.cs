@@ -49,6 +49,12 @@ namespace com.b_velop.Slipways.Data.Repositories
             return default;
         }
 
+        public virtual T SelectById(
+            Guid id)
+        {
+            return Context.Set<T>().Find(id);
+        }
+
         public virtual async Task<T> SelectByIdAsync(
             Guid id,
             CancellationToken cancellationToken = default)

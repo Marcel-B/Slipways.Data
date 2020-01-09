@@ -15,5 +15,6 @@ namespace com.b_velop.Slipways.Data.Contracts
         Task<T> SelectByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default, bool saveChanges = true);
         Task<T> DeleteAsync(Guid id, CancellationToken cancellationToken = default, bool saveChanges = true);
+        T SelectById(Guid id);
     }
 }

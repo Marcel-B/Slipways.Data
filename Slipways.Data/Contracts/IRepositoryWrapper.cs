@@ -11,6 +11,7 @@
         IPortRepository Port { get; }
         ISlipwayExtraRepository SlipwayExtra { get; }
         IManufacturerServicesRepository ManufacturerServices { get; }
+        SlipwaysContext Context { get; }
         void SaveChanges();
     }
 }

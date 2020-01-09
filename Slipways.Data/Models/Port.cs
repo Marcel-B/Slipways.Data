@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace com.b_velop.Slipways.Data.Models
 {
@@ -32,7 +34,9 @@ namespace com.b_velop.Slipways.Data.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        //[NotMapped]
+        [NotMapped]
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<Slipway> Slipways { get; set; }
 
         [ForeignKey("WaterFk")]

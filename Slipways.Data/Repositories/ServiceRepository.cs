@@ -27,7 +27,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             if (manufacturerIds == null)
-                throw new ArgumentNullException("ManufacturerIDs were null");
+                throw new ArgumentNullException("ManufacturerIDs are null");
 
             try
             {

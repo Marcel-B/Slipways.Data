@@ -153,7 +153,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             bool saveChanges = true)
         {
             if (entities == null)
-                throw new ArgumentNullException("Entities were null");
+                throw new ArgumentNullException("Entities are null");
 
             try
             {

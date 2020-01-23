@@ -10,7 +10,8 @@ namespace com.b_velop.Slipways.Data.Extensions
         public static IServiceCollection AddSlipwaysData(
             this IServiceCollection services,
             string connectionString = null,
-            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+            ServiceLifetime serviceLifetime = ServiceLifetime.Scoped,
+            bool enableSensitiveLogging = true)
         {
             services.AddMemoryCache();
 
@@ -31,8 +32,8 @@ namespace com.b_velop.Slipways.Data.Extensions
             services.AddDbContext<SlipwaysContext>(options =>
             {
                 options.UseSqlServer(connectionString);
-                options.EnableDetailedErrors(true);
-                options.EnableSensitiveDataLogging(true);
+                options.EnableDetailedErrors(enableSensitiveLogging);
+                options.EnableSensitiveDataLogging(enableSensitiveLogging);
             }, serviceLifetime);
 
             return services;

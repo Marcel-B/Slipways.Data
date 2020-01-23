@@ -26,7 +26,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             CancellationToken cancellationToken)
         {
             if (serviceIds == null)
-                throw new ArgumentNullException("ServiceIDs were null");
+                throw new ArgumentNullException("ServiceIDs are null");
 
             try
             {

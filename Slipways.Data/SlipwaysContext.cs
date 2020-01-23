@@ -1,6 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace com.b_velop.Slipways.Data
 {
@@ -16,14 +15,8 @@ namespace com.b_velop.Slipways.Data
         public DbSet<Extra> Extras { get; set; }
         public DbSet<SlipwayExtra> SlipwayExtras { get; set; }
 
-        private readonly ILogger<SlipwaysContext> _logger;
-
         public SlipwaysContext(
-            DbContextOptions options,
-            ILogger<SlipwaysContext> logger) : base(options)
-        {
-            _logger = logger;
-        }
+            DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(
               ModelBuilder modelBuilder)

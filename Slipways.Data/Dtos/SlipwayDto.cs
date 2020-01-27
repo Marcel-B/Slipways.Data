@@ -46,6 +46,9 @@ namespace com.b_velop.Slipways.Data.Dtos
         [JsonPropertyName("city")]
         public string City { get; set; }
 
+        [JsonPropertyName("country")]
+        public string Country { get; set; }
+
         [JsonPropertyName("costs")]
         public decimal Costs { get; set; }
 

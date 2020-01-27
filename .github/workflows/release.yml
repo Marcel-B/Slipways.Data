@@ -21,7 +21,7 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release
     - name: Pack
-      run: dotnet pack -p:PackageVersion=2.1.61 -c Release -o ./
+      run: dotnet pack -p:PackageVersion=2.1.62 -c Release -o ./
     - name: Publish to Nexus
       env:
         super_secret: ${{ secrets.NEXUS }} 

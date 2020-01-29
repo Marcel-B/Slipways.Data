@@ -42,6 +42,9 @@ namespace com.b_velop.Slipways.Data.Models
         [Display(Name = "Stadt / Ort")]
         public string City { get; set; }
 
+        [Display(Name = "Land")]
+        public string Country { get; set; }
+
         [Column(TypeName = "decimal(5, 2)")]
         [Display(Name = "Kosten (-1 für unbekannt)")]
         public decimal Costs { get; set; }

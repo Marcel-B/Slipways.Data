@@ -51,9 +51,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             return default;
         }
 
-            public async Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(
-                IEnumerable<Guid> waterIds,
-                CancellationToken cancellationToken)
+        public async Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(
+            IEnumerable<Guid> waterIds,
+            CancellationToken cancellationToken)
         {
             if (waterIds == null)
                 throw new ArgumentNullException("WaterIDs were null");
@@ -134,6 +134,36 @@ namespace com.b_velop.Slipways.Data.Repositories
                 _logger.LogError(6666, $"Error occurred while getting Slipways by ExtraIDs", e);
             }
             return default;
+        }
+
+        public async Task<Slipway> AddPortToSlipwayAsync(
+            Guid slipwayId,
+            Guid portId)
+        {
+            Slipway tmp = null;
+            try
+            {
+                tmp = await Context.Slipways.FirstOrDefaultAsync(_ => _.Id == slipwayId);
+                if (tmp == null)
+                    return null;
+                tmp.Updated = DateTime.Now;
+                tmp.PortFk = portId;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while adding Port to Slipways\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
+            }
+
+            try
+            {
+                Context.SaveChanges();
+                return tmp;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(6666, $"Error occurred while saving Slipway Context after update\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
+            }
+            return null;
         }
     }
 }

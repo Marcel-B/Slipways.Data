@@ -12,5 +12,6 @@ namespace com.b_velop.Slipways.Data.Contracts
         Task<ILookup<Guid, Slipway>> GetSlipwaysByPortIdAsync(IEnumerable<Guid> portIds, CancellationToken cancellationToken);
         Task<ILookup<Guid, Slipway>> GetSlipwayByWaterIdAsync(IEnumerable<Guid> waterIds, CancellationToken cancellationToken);
         Task<ILookup<Guid, Slipway>> GetSlipwaysByExtraIdAsync(IEnumerable<Guid> extraIds, CancellationToken cancellationToken);
+        Task<Slipway> AddPortToSlipwayAsync(Guid slipwayId, Guid portId);
     }
 }

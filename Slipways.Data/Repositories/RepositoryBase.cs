@@ -1,4 +1,5 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using com.b_velop.Slipways.Data.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,8 +15,9 @@ namespace com.b_velop.Slipways.Data.Repositories
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class, IEntity
     {
         protected SlipwaysContext Context;
-        protected IMemoryCache _memoryCache;
-        protected ILogger<RepositoryBase<T>> _logger;
+        protected IMemoryCache MemoryCache;
+        protected ILogger<RepositoryBase<T>> Logger;
+        protected readonly IList<IObserver<T>> Observers;
 
         protected string Key { get; set; }
 
@@ -25,8 +27,9 @@ namespace com.b_velop.Slipways.Data.Repositories
             ILogger<RepositoryBase<T>> logger)
         {
             Context = context;
-            _memoryCache = memoryCache;
-            _logger = logger;
+            Observers = new List<IObserver<T>>();
+            MemoryCache = memoryCache;
+            Logger = logger;
         }
 
         public virtual async Task<IEnumerable<T>> SelectAllAsync(
@@ -34,17 +37,17 @@ namespace com.b_velop.Slipways.Data.Repositories
         {
             try
             {
-                if (!_memoryCache.TryGetValue(Key, out HashSet<T> values))
+                if (!MemoryCache.TryGetValue(Key, out HashSet<T> values))
                 {
                     var fetch = await Context.Set<T>().ToListAsync(cancellationToken);
                     values = fetch.ToHashSet();
-                    _memoryCache.Set(Key, values);
+                    MemoryCache.Set(Key, values);
                 }
                 return values;
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while selecting values", e);
+                Logger.LogError(6666, $"Unexpected error occurred while selecting values", e);
             }
             return default;
         }
@@ -70,11 +73,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while selecting value by ID '{id}'", e);
+                Logger.LogError(6665, $"Error occurred while selecting value by ID '{id}'", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while selecting value by ID '{id}'", e);
+                Logger.LogError(6666, $"Unexpected error occurred while selecting value by ID '{id}'", e);
             }
             return default;
         }
@@ -94,11 +97,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while selecting value by condition", e);
+                Logger.LogError(6665, $"Error occurred while selecting value by condition", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while selecting value by condition", e);
+                Logger.LogError(6666, $"Unexpected error occurred while selecting value by condition", e);
             }
             return default;
         }
@@ -129,20 +132,29 @@ namespace com.b_velop.Slipways.Data.Repositories
                 var entities = await SelectAllAsync(cancellationToken);
                 var list = entities.ToHashSet();
                 list.Add(result.Entity);
-                _memoryCache.Set(Key, list);
+                MemoryCache.Set(Key, list);
+
+                foreach (var observer in Observers)
+                {
+                    if (result.Entity == null)
+                        observer.OnError(new ArgumentNullException("No entity provided"));
+                    else
+                        observer.OnNext(result.Entity);
+                }
+
                 return result.Entity;
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(6664, $"Error occurred while inserting new entity to database", e);
+                Logger.LogError(6664, $"Error occurred while inserting new entity to database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(6665, $"Error occurred while inserting new entity to database", e);
+                Logger.LogError(6665, $"Error occurred while inserting new entity to database", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database\n{e.Message}\n{e.StackTrace}", e);
+                Logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database\n{e.Message}\n{e.StackTrace}", e);
             }
             return default;
         }
@@ -158,7 +170,16 @@ namespace com.b_velop.Slipways.Data.Repositories
             try
             {
                 foreach (var entity in entities)
+                {
                     entity.Created = DateTime.Now;
+                    foreach (var observer in Observers)
+                    {
+                        if (entity == null)
+                            observer.OnError(new ArgumentNullException("No entity provided"));
+                        else
+                            observer.OnNext(entity);
+                    }
+                }
 
                 await Context.Set<T>().AddRangeAsync(entities, cancellationToken);
                 int count = 0;
@@ -167,24 +188,24 @@ namespace com.b_velop.Slipways.Data.Repositories
                 var allEntities = await SelectAllAsync(cancellationToken);
                 var list = allEntities.ToList();
                 list.AddRange(allEntities);
-                _memoryCache.Set(Key, list.ToHashSet());
+                MemoryCache.Set(Key, list.ToHashSet());
                 return count;
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6663, $"Error occurred while insert values range", e);
+                Logger.LogError(6663, $"Error occurred while insert values range", e);
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(6664, $"Error occurred while inserting new values range to database", e);
+                Logger.LogError(6664, $"Error occurred while inserting new values range to database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(6665, $"Error occurred while inserting new values range to database", e);
+                Logger.LogError(6665, $"Error occurred while inserting new values range to database", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while insert values range", e);
+                Logger.LogError(6666, $"Unexpected error occurred while insert values range", e);
             }
             return default;
         }
@@ -205,25 +226,34 @@ namespace com.b_velop.Slipways.Data.Repositories
                     entity.Updated = DateTime.Now;
                     var dbResult = Context.Set<T>().Update(entity);
                     if (dbResult != null)
+                    {
                         cnt++;
+                        foreach (var observer in Observers)
+                        {
+                            if (dbResult.Entity == null)
+                                observer.OnError(new ArgumentNullException("No entity provided"));
+                            else
+                                observer.OnNext(dbResult.Entity);
+                        }
+                    }
                 }
                 if (saveChanges)
                     _ = Context.SaveChanges();
                 var contextResult = await Context.Set<T>().ToListAsync(cancellationToken);
-                _memoryCache.Set(Key, contextResult.ToHashSet());
+                MemoryCache.Set(Key, contextResult.ToHashSet());
                 return cnt;
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(6664, $"Error occurred while updating values range in database", e);
+                Logger.LogError(6664, $"Error occurred while updating values range in database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(6665, $"Error occurred while updating values range in database", e);
+                Logger.LogError(6665, $"Error occurred while updating values range in database", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while updating values range", e);
+                Logger.LogError(6666, $"Unexpected error occurred while updating values range", e);
             }
             return default;
         }
@@ -243,20 +273,29 @@ namespace com.b_velop.Slipways.Data.Repositories
                 if (saveChanges)
                     _ = Context.SaveChanges();
                 var dbList = await Context.Set<T>().ToListAsync(cancellationToken);
-                _memoryCache.Set(Key, dbList.ToHashSet());
+                MemoryCache.Set(Key, dbList.ToHashSet());
+
+                foreach (var observer in Observers)
+                {
+                    if (result.Entity == null)
+                        observer.OnError(new ArgumentNullException("No entity provided"));
+                    else
+                        observer.OnNext(result.Entity);
+                }
+
                 return result.Entity;
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(6664, $"Error occurred while updating value in database", e);
+                Logger.LogError(6664, $"Error occurred while updating value in database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(6665, $"Error occurred while updating value in database", e);
+                Logger.LogError(6665, $"Error occurred while updating value in database", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while updating value", e);
+                Logger.LogError(6666, $"Unexpected error occurred while updating value", e);
             }
             return default;
         }
@@ -275,7 +314,7 @@ namespace com.b_velop.Slipways.Data.Repositories
                 var tmp = await Context.Set<T>().FirstOrDefaultAsync(_ => _.Id == id, cancellationToken);
                 if (tmp == null)
                 {
-                    _logger.LogWarning(5000, $"Can't delete Entity with ID '{id}' - Entity not exsists");
+                    Logger.LogWarning(5000, $"Can't delete Entity with ID '{id}' - Entity not exsists");
                     return null;
                 }
                 result = Context.Set<T>().Remove(tmp).Entity;
@@ -284,33 +323,69 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                _logger.LogError(6664, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6664, $"Error occurred while remove Entity with ID '{id}' from Database", e);
             }
             catch (DbUpdateException e)
             {
-                _logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Database", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Database", e);
             }
             try
             {
                 var entities = await SelectAllAsync(cancellationToken);
                 var list = entities.ToHashSet();
                 list.RemoveWhere(_ => _.Id == id);
-                _memoryCache.Set(Key, list);
+                MemoryCache.Set(Key, list);
                 return result;
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+                Logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Unexpected error occurred while remove Entity with ID '{id}' from Cache", e);
+                Logger.LogError(6666, $"Unexpected error occurred while remove Entity with ID '{id}' from Cache", e);
             }
             return null;
+        }
+
+        public IDisposable Subscribe(
+            IObserver<T> observer)
+        {
+            if (!Observers.Contains(observer))
+                Observers.Add(observer);
+            return new Unsubscriber(Observers, observer);
+        }
+
+        public void UnsubscribeAll()
+        {
+            foreach (var observer in Observers.ToArray())
+                if (Observers.Contains(observer))
+                    observer.OnCompleted();
+            Observers.Clear();
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            protected IList<IObserver<T>> Observers;
+            protected IObserver<T> Observer;
+
+            public Unsubscriber(
+                IList<IObserver<T>> observers,
+                IObserver<T> observer)
+            {
+                Observers = observers;
+                Observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (Observers != null && Observers.Contains(Observer))
+                    Observers.Remove(Observer);
+            }
         }
     }
 }

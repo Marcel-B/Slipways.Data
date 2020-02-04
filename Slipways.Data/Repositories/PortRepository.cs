@@ -36,15 +36,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6664, $"Error occurred while getting Ports by ID", e);
+                Logger.LogError(6664, $"Error occurred while getting Ports by ID", e);
             }
             catch (ArgumentException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Ports by ID", e);
+                Logger.LogError(6665, $"Error occurred while getting Ports by ID", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Ports by ID", e);
+                Logger.LogError(6666, $"Error occurred while getting Ports by ID", e);
             }
             return default;
         }
@@ -60,10 +60,10 @@ namespace com.b_velop.Slipways.Data.Repositories
             {
                 var ports = await SelectAllAsync(cancellationToken);
 
-                if (!_memoryCache.TryGetValue(Cache.Waters, out HashSet<Water> watersAll))
+                if (!MemoryCache.TryGetValue(Cache.Waters, out HashSet<Water> watersAll))
                 {
                     watersAll = Context.Waters.ToHashSet();
-                    _memoryCache.Set(Cache.Waters, watersAll);
+                    MemoryCache.Set(Cache.Waters, watersAll);
                 }
 
                 var waters = watersAll.Where(_ => waterIds.Contains(_.Id));
@@ -80,11 +80,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Ports by WaterIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Ports by WaterIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Ports by WaterIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Ports by WaterIDs", e);
             }
             return default;
         }

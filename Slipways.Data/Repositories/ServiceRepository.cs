@@ -32,10 +32,10 @@ namespace com.b_velop.Slipways.Data.Repositories
             try
             {
                 var services = await SelectAllAsync(cancellationToken);
-                if (!_memoryCache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
+                if (!MemoryCache.TryGetValue(Cache.ManufacturerServices, out HashSet<ManufacturerService> manufacturerServicesAll))
                 {
                     manufacturerServicesAll = Context.ManufacturerServices.ToHashSet();
-                    _memoryCache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
+                    MemoryCache.Set(Cache.ManufacturerServices, manufacturerServicesAll);
                 }
 
                 var manufacturerServices = manufacturerServicesAll.Where(_ => manufacturerIds.Contains(_.ManufacturerFk));
@@ -67,11 +67,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Services by ManufacturerIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Services by ManufacturerIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Services by ManufacturerIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Services by ManufacturerIDs", e);
             }
             return default;
         }

@@ -1,5 +1,7 @@
 using com.b_velop.Slipways.Data.Extensions;
+using com.b_velop.Slipways.Data.Helper;
 using com.b_velop.Slipways.Data.Models;
+using com.b_velop.Slipways.Data.Repositories;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,6 +9,33 @@ using System.Linq;
 
 namespace Slipways.Data.Tests
 {
+    public class Reporter<T> : IObserver<T>
+    {
+        private IDisposable unsubscriber;
+        public void OnCompleted()
+        {
+            Console.WriteLine("The Location Tracker has completed transmitting data");
+            this.Unsubscribe();
+        }
+
+        public void OnError(
+            Exception error)
+        {
+            Console.WriteLine("Error happens");
+        }
+
+        public void OnNext(
+            T value)
+        {
+            Console.WriteLine("Updated");
+        }
+
+        public virtual void Unsubscribe()
+        {
+            unsubscriber.Dispose();
+        }
+    }
+
     [TestFixture]
     public class SlipwayWrapperTest
     {

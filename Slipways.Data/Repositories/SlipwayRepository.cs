@@ -42,11 +42,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Slipways by PortIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Slipways by PortIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Slipways by PortIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Slipways by PortIDs", e);
             }
             return default;
         }
@@ -71,11 +71,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Slipways by WaterIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Slipways by WaterIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Slipways by WaterIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Slipways by WaterIDs", e);
             }
             return default;
         }
@@ -90,10 +90,10 @@ namespace com.b_velop.Slipways.Data.Repositories
             try
             {
                 var slipways = await SelectAllAsync(cancellationToken);
-                if (!_memoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
+                if (!MemoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
                 {
                     slipwayExtrasAll = Context.SlipwayExtras.ToHashSet();
-                    _memoryCache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
+                    MemoryCache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
                 }
                 var slipwayExtras = slipwayExtrasAll.Where(_ => extraIds.Contains(_.ExtraFk));
 
@@ -127,11 +127,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Slipways by ExtraIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Slipways by ExtraIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Slipways by ExtraIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Slipways by ExtraIDs", e);
             }
             return default;
         }
@@ -151,7 +151,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while adding Port to Slipways\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
+                Logger.LogError(6666, $"Error occurred while adding Port to Slipways\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
             }
 
             try
@@ -161,7 +161,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while saving Slipway Context after update\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
+                Logger.LogError(6666, $"Error occurred while saving Slipway Context after update\nPort: '{portId}'\nSlipway: '{slipwayId}'", e);
             }
             return null;
         }

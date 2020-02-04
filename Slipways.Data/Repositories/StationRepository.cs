@@ -37,11 +37,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Stations by WaterIds", e);
+                Logger.LogError(6665, $"Error occurred while getting Stations by WaterIds", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Stations by WaterIds", e);
+                Logger.LogError(6666, $"Error occurred while getting Stations by WaterIds", e);
             }
             return default;
         }

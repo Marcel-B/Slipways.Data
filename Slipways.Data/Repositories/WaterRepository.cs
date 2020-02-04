@@ -36,15 +36,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6664, $"Error occurred while getting Waters by ID", e);
+                Logger.LogError(6664, $"Error occurred while getting Waters by ID", e);
             }
             catch (ArgumentException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Waters by ID", e);
+                Logger.LogError(6665, $"Error occurred while getting Waters by ID", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Waters by ID", e);
+                Logger.LogError(6666, $"Error occurred while getting Waters by ID", e);
             }
             return default;
         }

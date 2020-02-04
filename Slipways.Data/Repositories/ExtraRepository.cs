@@ -32,10 +32,10 @@ namespace com.b_velop.Slipways.Data.Repositories
             {
                 var extras = await SelectAllAsync(cancellationToken);
 
-                if (!_memoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
+                if (!MemoryCache.TryGetValue(Cache.SlipwayExtras, out HashSet<SlipwayExtra> slipwayExtrasAll))
                 {
                     slipwayExtrasAll = Context.SlipwayExtras.ToHashSet();
-                    _memoryCache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
+                    MemoryCache.Set(Cache.SlipwayExtras, slipwayExtrasAll);
                 }
 
                 var extraIds = slipwayExtrasAll.Where(_ => slipwaysIds.Contains(_.SlipwayFk));
@@ -58,11 +58,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                _logger.LogError(6665, $"Error occurred while getting Extras by SlipwayIDs", e);
+                Logger.LogError(6665, $"Error occurred while getting Extras by SlipwayIDs", e);
             }
             catch (Exception e)
             {
-                _logger.LogError(6666, $"Error occurred while getting Extras by SlipwayIDs", e);
+                Logger.LogError(6666, $"Error occurred while getting Extras by SlipwayIDs", e);
             }
             return default;
         }

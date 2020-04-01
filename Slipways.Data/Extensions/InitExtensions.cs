@@ -2,6 +2,7 @@
 using com.b_velop.Slipways.Data.Contracts;
 using com.b_velop.Slipways.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace com.b_velop.Slipways.Data.Extensions
 {
@@ -25,6 +26,7 @@ namespace com.b_velop.Slipways.Data.Extensions
             services.AddScoped<ISlipwayRepository, SlipwayRepository>();
             services.AddScoped<IStationRepository, StationRepository>();
             services.AddScoped<IWaterRepository, WaterRepository>();
+            services.AddAutoMapper(typeof(RepositoryWrapper).Assembly);
 
             if (string.IsNullOrWhiteSpace(connectionString))
                 return services;
@@ -32,6 +34,7 @@ namespace com.b_velop.Slipways.Data.Extensions
             services.AddDbContext<SlipwaysContext>(options =>
             {
                 options.UseSqlServer(connectionString);
+                options.UseLazyLoadingProxies();
                 options.EnableDetailedErrors(enableSensitiveLogging);
                 options.EnableSensitiveDataLogging(enableSensitiveLogging);
             }, serviceLifetime);

@@ -14,6 +14,6 @@ namespace com.b_velop.Slipways.Data.Models
         public Guid WaterFk { get; set; }
 
         [ForeignKey("WaterFk")]
-        public Water Water { get; set; }
+        public virtual Water Water { get; set; }
     }
 }

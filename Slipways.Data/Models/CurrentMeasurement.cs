@@ -13,7 +13,7 @@ namespace com.b_velop.Slipways.Data.Models
         public string StateNswHsw { get; set; }
 
         [ForeignKey("StationFk")]
-        public Station Station { get; set; }
+        public virtual Station Station { get; set; }
 
         public Guid StationFk { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace com.b_velop.Slipways.Data.Models
 {
@@ -9,7 +9,7 @@ namespace com.b_velop.Slipways.Data.Models
     public abstract class Entity : IEntity
     {
         [Key]
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public Guid Id { get; set; }
 
         [Display(Name = "Erstellt")]

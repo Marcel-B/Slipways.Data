@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
     public class CurrentMeasurementDto
     {
-        [JsonPropertyName("timestamp")]
+        [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
 
-        [JsonPropertyName("value")]
+        [JsonProperty("value")]
         public double Value { get; set; }
 
-        [JsonPropertyName("trend")]
+        [JsonProperty("trend")]
         public int Trend { get; set; }
 
-        [JsonPropertyName("stateMnwMhw")]
+        [JsonProperty("stateMnwMhw")]
         public string StateMnwMhw { get; set; }
 
-        [JsonPropertyName("stateNswHsw")]
+        [JsonProperty("stateNswHsw")]
         public string StateNswHsw { get; set; }
     }
 }

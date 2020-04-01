@@ -1,55 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using com.b_velop.Slipways.Data.Contracts;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
     public class PortDto : IDto
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("created")]
+        [JsonProperty("created")]
         public DateTime Created { get; set; }
 
-        [JsonPropertyName("updated")]
+        [JsonProperty("updated")]
         public DateTime? Updated { get; set; }
 
-        [JsonPropertyName("latitude")]
+        [JsonProperty("latitude")]
         public double Latitude { get; set; }
 
-        [JsonPropertyName("longitude")]
+        [JsonProperty("longitude")]
         public double Longitude { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("url")]
+        [JsonProperty("url")]
         public string Url { get; set; }
 
-        [JsonPropertyName("street")]
+        [JsonProperty("street")]
         public string Street { get; set; }
 
-        [JsonPropertyName("postalcode")]
+        [JsonProperty("postalcode")]
         public string Postalcode { get; set; }
 
-        [JsonPropertyName("city")]
+        [JsonProperty("city")]
         public string City { get; set; }
 
-        [JsonPropertyName("phone")]
+        [JsonProperty("phone")]
         public string Phone { get; set; }
 
-        [JsonPropertyName("email")]
+        [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonPropertyName("water")]
+        [JsonProperty("water")]
         public WaterDto Water { get; set; }
 
-        [JsonPropertyName("waterFk")]
+        [JsonProperty("waterFk")]
         public Guid WaterFk { get; set; }
 
-        [JsonPropertyName("slipways")]
+        [JsonProperty("slipways")]
         public IEnumerable<SlipwayDto> Slipways { get; set; }
     }
 }

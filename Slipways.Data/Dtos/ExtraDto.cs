@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 using com.b_velop.Slipways.Data.Contracts;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
     public class ExtraDto : IDto
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 }

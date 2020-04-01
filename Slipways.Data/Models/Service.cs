@@ -10,7 +10,7 @@ namespace com.b_velop.Slipways.Data.Models
     {
         public Service()
         {
-            Manufacturers = new List<Manufacturer>();
+            Manufacturers = new HashSet<Manufacturer>();
         }
 
         [Display(Name = "Name")]
@@ -41,6 +41,6 @@ namespace com.b_velop.Slipways.Data.Models
         public Guid ManufacturerFk { get; set; }
 
         [NotMapped]
-        public List<Manufacturer> Manufacturers { get; set; }
+        public virtual ICollection<Manufacturer> Manufacturers { get; set; }
     }
 }

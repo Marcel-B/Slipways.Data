@@ -7,17 +7,10 @@
     <Company>b-velop</Company>
     <Authors>Marcel Benders</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>b-velop</Company>
+    <PackageDescription>This package adds an Octocat!</PackageDescription>
+    <RepositoryUrl>https://github.com/Marcel-B/Slipways.Data</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="NuGet.config" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="NuGet.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />

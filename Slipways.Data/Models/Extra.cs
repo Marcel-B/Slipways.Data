@@ -10,16 +10,14 @@ namespace com.b_velop.Slipways.Data.Models
     {
         public Extra()
         {
-            Slipways = new List<Slipway>();
+            SlipwayExtras = new HashSet<SlipwayExtra>();
         }
 
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [NotMapped]
-        public List<Slipway> Slipways { get; set; }
+        public virtual ICollection<SlipwayExtra> SlipwayExtras { get; set; }
 
-        [NotMapped]
         public Guid SlipwayFk { get; set; }
     }
 }

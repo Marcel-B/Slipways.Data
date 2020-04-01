@@ -11,9 +11,9 @@ namespace com.b_velop.Slipways.Data.Models
         public Guid ExtraFk { get; set; }
 
         [ForeignKey("SlipwayFk")]
-        public Slipway Slipway { get; set; }
+        public virtual Slipway Slipway { get; set; }
 
         [ForeignKey("ExtraFk")]
-        public Extra Extra { get; set; }
+        public virtual Extra Extra { get; set; }
     }
 }

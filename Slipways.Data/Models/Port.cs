@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Models
 {
     [Serializable]
     public class Port : Locationable
     {
+        public Port()
+        {
+            Slipways = new HashSet<Slipway>();
+        }
+
         [Display(Name = "Name")]
         public string Name { get; set; }
 
@@ -34,13 +39,13 @@ namespace com.b_velop.Slipways.Data.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        [NotMapped]
         [JsonIgnore]
         [IgnoreDataMember]
-        public IEnumerable<Slipway> Slipways { get; set; }
+        public virtual ICollection<Slipway> Slipways { get; set; }
 
         [ForeignKey("WaterFk")]
-        public Water Water { get; set; }
+        public virtual Water Water { get; set; }
+
         public Guid WaterFk { get; set; }
     }
 }

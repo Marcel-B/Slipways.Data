@@ -1,36 +1,36 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 using com.b_velop.Slipways.Data.Contracts;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
     public class StationDto : IDto
     {
-        [JsonPropertyName("uuid")]
+        [JsonProperty("uuid")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("number")]
+        [JsonProperty("number")]
         public string Number { get; set; }
 
-        [JsonPropertyName("shortname")]
+        [JsonProperty("shortname")]
         public string Shortname { get; set; }
 
-        [JsonPropertyName("longname")]
+        [JsonProperty("longname")]
         public string Longname { get; set; }
 
-        [JsonPropertyName("km")]
+        [JsonProperty("km")]
         public double Km { get; set; }
 
-        [JsonPropertyName("agency")]
+        [JsonProperty("agency")]
         public string Agency { get; set; }
 
-        [JsonPropertyName("longitude")]
+        [JsonProperty("longitude")]
         public double Longitude { get; set; }
 
-        [JsonPropertyName("latitude")]
+        [JsonProperty("latitude")]
         public double Latitude { get; set; }
 
-        [JsonPropertyName("water")]
+        [JsonProperty("water")]
         public WaterDto Water { get; set; }
     }
 }

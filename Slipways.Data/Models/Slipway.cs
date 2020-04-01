@@ -11,7 +11,7 @@ namespace com.b_velop.Slipways.Data.Models
     {
         public Slipway()
         {
-            Extras = new List<Extra>();
+            SlipwayExtras = new HashSet<SlipwayExtra>();
         }
 
         [Display(Name = "Name")]
@@ -20,12 +20,12 @@ namespace com.b_velop.Slipways.Data.Models
         public Guid? PortFk { get; set; }
 
         [ForeignKey("PortFk")]
-        public Port Port { get; set; }
+        public virtual Port Port { get; set; }
 
         public Guid WaterFk { get; set; }
 
         [ForeignKey("WaterFk")]
-        public Water Water { get; set; }
+        public virtual Water Water { get; set; }
 
         [Display(Name = "Bewertung")]
         public int Rating { get; set; }
@@ -55,10 +55,6 @@ namespace com.b_velop.Slipways.Data.Models
         [Display(Name = "Kontra")]
         public string Contra { get; set; }
 
-        [NotMapped]
-        public Guid ExtraFk { get; set; }
-
-        [NotMapped]
-        public List<Extra> Extras { get; set; }
+        public virtual ICollection<SlipwayExtra> SlipwayExtras { get; set; }
     }
 }

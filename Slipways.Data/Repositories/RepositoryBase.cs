@@ -1,5 +1,4 @@
 ﻿using com.b_velop.Slipways.Data.Contracts;
-using com.b_velop.Slipways.Data.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -47,7 +46,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while selecting values", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while selecting values");
             }
             return default;
         }
@@ -73,11 +72,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                Logger.LogError(6665, $"Error occurred while selecting value by ID '{id}'", e);
+                Logger.LogError(6665, e, $"Error occurred while selecting value by ID '{id}'");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while selecting value by ID '{id}'", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while selecting value by ID '{id}'");
             }
             return default;
         }
@@ -97,11 +96,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                Logger.LogError(6665, $"Error occurred while selecting value by condition", e);
+                Logger.LogError(6665, e, $"Error occurred while selecting value by condition");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while selecting value by condition", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while selecting value by condition");
             }
             return default;
         }
@@ -118,7 +117,7 @@ namespace com.b_velop.Slipways.Data.Repositories
             bool saveChanges = true)
         {
             if (entity == null)
-                throw new ArgumentNullException("Entity was null");
+                throw new ArgumentNullException(nameof(T));
             try
             {
                 entity.Created = DateTime.Now;
@@ -146,15 +145,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Logger.LogError(6664, $"Error occurred while inserting new entity to database", e);
+                Logger.LogError(6664, e, $"Error occurred while inserting new entity to database");
             }
             catch (DbUpdateException e)
             {
-                Logger.LogError(6665, $"Error occurred while inserting new entity to database", e);
+                Logger.LogError(6665, e, $"Error occurred while inserting new entity to database");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while inserting new entity to database\n{e.Message}\n{e.StackTrace}", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while inserting new entity to database");
             }
             return default;
         }
@@ -193,19 +192,19 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                Logger.LogError(6663, $"Error occurred while insert values range", e);
+                Logger.LogError(6663, e, $"Error occurred while insert values range");
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Logger.LogError(6664, $"Error occurred while inserting new values range to database", e);
+                Logger.LogError(6664, e, $"Error occurred while inserting new values range to database");
             }
             catch (DbUpdateException e)
             {
-                Logger.LogError(6665, $"Error occurred while inserting new values range to database", e);
+                Logger.LogError(6665, e, $"Error occurred while inserting new values range to database");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while insert values range", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while insert values range");
             }
             return default;
         }
@@ -245,15 +244,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Logger.LogError(6664, $"Error occurred while updating values range in database", e);
+                Logger.LogError(6664, e, $"Error occurred while updating values range in database");
             }
             catch (DbUpdateException e)
             {
-                Logger.LogError(6665, $"Error occurred while updating values range in database", e);
+                Logger.LogError(6665, e, $"Error occurred while updating values range in database");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while updating values range", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while updating values range");
             }
             return default;
         }
@@ -287,15 +286,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Logger.LogError(6664, $"Error occurred while updating value in database", e);
+                Logger.LogError(6664, e, $"Error occurred while updating value in database");
             }
             catch (DbUpdateException e)
             {
-                Logger.LogError(6665, $"Error occurred while updating value in database", e);
+                Logger.LogError(6665, e, $"Error occurred while updating value in database");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while updating value", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while updating value");
             }
             return default;
         }
@@ -323,15 +322,15 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Logger.LogError(6664, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6664, e, $"Error occurred while remove Entity with ID '{id}' from Database");
             }
             catch (DbUpdateException e)
             {
-                Logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6665, e, $"Error occurred while remove Entity with ID '{id}' from Database");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Error occurred while remove Entity with ID '{id}' from Database", e);
+                Logger.LogError(6666, e, $"Error occurred while remove Entity with ID '{id}' from Database");
             }
             try
             {
@@ -343,11 +342,11 @@ namespace com.b_velop.Slipways.Data.Repositories
             }
             catch (ArgumentNullException e)
             {
-                Logger.LogError(6665, $"Error occurred while remove Entity with ID '{id}' from Cache", e);
+                Logger.LogError(6665, e, $"Error occurred while remove Entity with ID '{id}' from Cache");
             }
             catch (Exception e)
             {
-                Logger.LogError(6666, $"Unexpected error occurred while remove Entity with ID '{id}' from Cache", e);
+                Logger.LogError(6666, e, $"Unexpected error occurred while remove Entity with ID '{id}' from Cache");
             }
             return null;
         }

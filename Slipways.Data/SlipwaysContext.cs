@@ -22,11 +22,20 @@ namespace com.b_velop.Slipways.Data
               ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder
-                .Entity<Slipway>()
-                .HasOne(_ => _.Port)
-                .WithMany(_ => _.Slipways)
-                .OnDelete(DeleteBehavior.NoAction);
+                .Entity<SlipwayExtra>()
+                .HasOne(_ => _.Slipway)
+                .WithMany(_ => _.SlipwayExtras)
+                .HasForeignKey(_ => _.SlipwayFk)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+                .Entity<SlipwayExtra>()
+                .HasOne(_ => _.Extra)
+                .WithMany(_ => _.SlipwayExtras)
+                .HasForeignKey(_ => _.ExtraFk)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

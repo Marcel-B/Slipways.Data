@@ -1,70 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using com.b_velop.Slipways.Data.Contracts;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Dtos
 {
     public class SlipwayDto : IDto
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("created")]
+        [JsonProperty("created")]
         public DateTime Created { get; set; }
 
-        [JsonPropertyName("updated")]
+        [JsonProperty("updated")]
         public DateTime? Updated { get; set; }
 
-        [JsonPropertyName("latitude")]
+        [JsonProperty("latitude")]
         public double Latitude { get; set; }
 
-        [JsonPropertyName("longitude")]
+        [JsonProperty("longitude")]
         public double Longitude { get; set; }
 
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("waterFk")]
+        [JsonProperty("waterFk")]
         public Guid WaterFk { get; set; }
 
-        [JsonPropertyName("portFk")]
+        [JsonProperty("portFk")]
         public Guid PortFk { get; set; }
 
-        [JsonPropertyName("rating")]
+        [JsonProperty("rating")]
         public int Rating { get; set; }
 
-        [JsonPropertyName("comment")]
+        [JsonProperty("comment")]
         public string Comment { get; set; }
 
-        [JsonPropertyName("street")]
+        [JsonProperty("street")]
         public string Street { get; set; }
 
-        [JsonPropertyName("postalcode")]
+        [JsonProperty("postalcode")]
         public string Postalcode { get; set; }
 
-        [JsonPropertyName("city")]
+        [JsonProperty("city")]
         public string City { get; set; }
 
-        [JsonPropertyName("country")]
+        [JsonProperty("country")]
         public string Country { get; set; }
 
-        [JsonPropertyName("costs")]
+        [JsonProperty("costs")]
         public decimal Costs { get; set; }
 
-        [JsonPropertyName("pro")]
+        [JsonProperty("pro")]
         public string Pro { get; set; }
 
-        [JsonPropertyName("contra")]
+        [JsonProperty("contra")]
         public string Contra { get; set; }
 
-        [JsonPropertyName("extras")]
+        [JsonProperty("extras")]
         public IEnumerable<ExtraDto> Extras { get; set; }
 
-        [JsonPropertyName("water")]
+        [JsonProperty("water")]
         public WaterDto Water { get; set; }
 
-        [JsonPropertyName("port")]
+        [JsonProperty("port")]
         public PortDto Port { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 name: .NET Core
 
 on:
-  push: 
+  push:
     #Sequence of patterns matched against refs/heads
-    branches:    
+    branches:
       - master         # Push events on master
 jobs:
   build:
@@ -21,10 +21,11 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release
     - name: Pack
-      run: dotnet pack -p:PackageVersion=2.1.64 -c Release -o ./
+      run: dotnet pack -p:PackageVersion=2.1.66 -c Release -o ./
     - name: Publish to Nexus
       env:
-        super_secret: ${{ secrets.NEXUS }} 
-      run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret *.nupkg
-    - name: Clean Packages
+        super_secret: ${{ secrets.NEXUS }}
+      #run: dotnet nuget push -s https://nexus.qaybe.de/repository/nuget-hosted/ -k $super_secret *.nupkg
+      run: dotnet nuget push "*.nupkg" --source "github"
+ - name: Clean Packages
       run: rm *.nupkg

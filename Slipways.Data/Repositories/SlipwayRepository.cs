@@ -106,7 +106,7 @@ namespace com.b_velop.Slipways.Data.Repositories
                         result.Add(new Slipway
                         {
                             Id = slipway.Id,
-                            ExtraFk = slipwayExtra.ExtraFk,
+                            //ExtraFk = slipwayExtra.ExtraFk,
                             City = slipway.City,
                             Latitude = slipway.Latitude,
                             Longitude = slipway.Longitude,
@@ -123,7 +123,7 @@ namespace com.b_velop.Slipways.Data.Repositories
                             Comment = slipway.Comment
                         });
                 }
-                return result.ToLookup(x => x.ExtraFk);
+                return null;
             }
             catch (ArgumentNullException e)
             {

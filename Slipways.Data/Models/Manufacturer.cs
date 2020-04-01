@@ -16,10 +16,8 @@ namespace com.b_velop.Slipways.Data.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-        [NotMapped]
         public Guid ServiceFk { get; set; }
 
-        [NotMapped]
-        public ICollection<Manufacturer> Services { get; set; }
+        public virtual ICollection<Manufacturer> Services { get; set; }
     }
 }

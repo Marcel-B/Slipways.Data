@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace com.b_velop.Slipways.Data.Models
 {
     [Serializable]
     public class Water : Entity
     {
-        [JsonPropertyName("shortname")]
+        [JsonProperty("shortname")]
         public string Shortname { get; set; }
 
-        [JsonPropertyName("longname")]
+        [JsonProperty("longname")]
         public string Longname { get; set; }
     }
 }
